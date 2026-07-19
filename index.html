@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Courage for Kids</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+scroll-behavior:smooth;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#fff;
+color:#222;
+}
+
+header{
+position:fixed;
+top:0;
+width:100%;
+background:white;
+padding:18px 8%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 3px 15px rgba(0,0,0,.08);
+z-index:1000;
+}
+
+.logo{
+font-size:25px;
+font-weight:700;
+color:#0D47A1;
+}
+
+nav a{
+margin-left:25px;
+text-decoration:none;
+color:#333;
+font-weight:500;
+transition:.3s;
+}
+
+nav a:hover{
+color:#1976D2;
+}
+
+.hero{
+
+padding:180px 8% 120px;
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
+background:linear-gradient(135deg,#0D47A1,#1976D2);
+color:white;
+}
+
+.hero h1{
+font-size:58px;
+margin-bottom:15px;
+}
+
+.hero p{
+font-size:20px;
+max-width:700px;
+margin:auto;
+line-height:1.7;
+}
+
+.buttons{
+margin-top:40px;
+}
+
+.btn{
+padding:15px 35px;
+border-radius:50px;
+text-decoration:none;
+display:inline-block;
+margin:10px;
+font-weight:600;
+transition:.3s;
+}
+
+.primary{
+background:#FFD54F;
+color:#222;
+}
+
+.secondary{
+border:2px solid white;
+color:white;
+}
+
+.btn:hover{
+transform:translateY(-3px);
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+padding:80px 10%;
+text-align:center;
+gap:40px;
+}
+
+.stat h2{
+font-size:45px;
+color:#1976D2;
+}
+
+section{
+padding:100px 8%;
+}
+
+h2.section-title{
+font-size:42px;
+margin-bottom:20px;
+text-align:center;
+}
+
+.section-text{
+max-width:800px;
+margin:auto;
+text-align:center;
+line-height:1.8;
+margin-bottom:60px;
+}
+
+.about-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:60px;
+align-items:center;
+}
+
+.about-box{
+background:#F6F8FC;
+padding:40px;
+border-radius:20px;
+}
+
+.team{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:30px;
+}
+
+.member{
+background:white;
+border-radius:20px;
+padding:30px;
+text-align:center;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.member img{
+width:120px;
+height:120px;
+border-radius:50%;
+object-fit:cover;
+margin-bottom:15px;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:30px;
+}
+
+.card{
+padding:40px;
+border-radius:20px;
+background:#F7F9FC;
+}
+
+.card h3{
+margin-bottom:15px;
+color:#1565C0;
+}
+
+.cta{
+background:#1565C0;
+color:white;
+text-align:center;
+border-radius:25px;
+padding:70px;
+}
+
+.cta a{
+margin-top:30px;
+display:inline-block;
+padding:16px 40px;
+background:#FFD54F;
+color:#222;
+text-decoration:none;
+border-radius:50px;
+font-weight:600;
+}
+
+.contact{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:60px;
+}
+
+form input,
+textarea{
+width:100%;
+padding:18px;
+margin-bottom:18px;
+border-radius:10px;
+border:1px solid #ddd;
+}
+
+textarea{
+height:180px;
+resize:none;
+}
+
+button{
+background:#1565C0;
+color:white;
+padding:15px 30px;
+border:none;
+border-radius:40px;
+cursor:pointer;
+}
+
+footer{
+padding:60px 8%;
+background:#0D47A1;
+color:white;
+text-align:center;
+}
+
+footer a{
+color:white;
+margin:0 10px;
+text-decoration:none;
+}
+
+@media(max-width:900px){
+
+.stats{
+grid-template-columns:repeat(2,1fr);
+}
+
+.about-grid,
+.contact{
+grid-template-columns:1fr;
+}
+
+.hero h1{
+font-size:40px;
+}
+
+nav{
+display:none;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">💙 Courage for Kids</div>
+
+<nav>
+
+<a href="#about">About</a>
+<a href="#team">Team</a>
+<a href="#mission">Mission</a>
+<a href="#contact">Contact</a>
+<a href="#">Donate</a>
+
+</nav>
+
+</header>
+
+<section class="hero">
+
+<div>
+
+<h1>Hope for every child fighting cancer.</h1>
+
+<p>
+We exist to bring comfort, encouragement, and real support to children facing one of life's toughest challenges—and to the families standing beside them.
+</p>
+
+<div class="buttons">
+
+<a href="#" class="btn primary">Support Our Mission</a>
+
+<a href="#about" class="btn secondary">Learn More</a>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="stats">
+
+<div class="stat">
+<h2>48</h2>
+<p>Families Supported</p>
+</div>
+
+<div class="stat">
+<h2>48</h2>
+<p>Courage Boxes Delivered</p>
+</div>
+
+<div class="stat">
+<h2>$2,300+</h2>
+<p>Raised in 2025</p>
+</div>
+
+<div class="stat">
+<h2>6</h2>
+<p>Team Members</p>
+</div>
+
+</section>
+
+<section id="about">
+
+<h2 class="section-title">Built on Compassion, Driven by Action</h2>
+
+<p class="section-text">
+Courage for Kids was created with one purpose: supporting children battling cancer and bringing comfort to families during one of life's hardest journeys.
+</p>
+
+<div class="about-grid">
+
+<div class="about-box">
+
+<h3>Founded in 2024</h3>
+
+<p>
+Our mission is built on compassion, courage, and community. Every child deserves hope.
+</p>
+
+</div>
+
+<div>
+
+<h3>Founder</h3>
+
+<h1>Jacob Rogers</h1>
+
+<p>
+Age doesn't limit impact. Caring enough to act does.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<section id="team">
+
+<h2 class="section-title">Meet Our Team</h2>
+
+<div class="team">
+
+<div class="member">
+<img src="https://placehold.co/200x200">
+<h3>Daniel Flores</h3>
+<p>Executive Director of Initiatives</p>
+</div>
+
+<div class="member">
+<img src="https://placehold.co/200x200">
+<h3>Davis Lindsey</h3>
+<p>Patient Interaction Director</p>
+</div>
+
+<div class="member">
+<img src="https://placehold.co/200x200">
+<h3>Colin Courier</h3>
+<p>Community Engagement Ambassador</p>
+</div>
+
+<div class="member">
+<img src="https://placehold.co/200x200">
+<h3>Julia Bagwell</h3>
+<p>Fundraising Director</p>
+</div>
+
+<div class="member">
+<img src="https://placehold.co/200x200">
+<h3>Isaac Okebe</h3>
+<p>Volunteer Coordinator</p>
+</div>
+
+<div class="member">
+<img src="https://placehold.co/200x200">
+<h3>Cooper Patterson</h3>
+<p>Director of Logistics & Outreach</p>
+</div>
+
+</div>
+
+</section>
+
+<section id="mission">
+
+<h2 class="section-title">Our Mission</h2>
+
+<div class="cards">
+
+<div class="card">
+<h3>📦 Courage Boxes</h3>
+<p>Comfort packages filled with activities, essentials, and encouragement.</p>
+</div>
+
+<div class="card">
+<h3>🤝 Family Support</h3>
+<p>Resources, guidance, and emotional support for families navigating childhood cancer.</p>
+</div>
+
+<div class="card">
+<h3>📢 Awareness & Advocacy</h3>
+<p>Building awareness and creating stronger support systems through community partnerships.</p>
+</div>
+
+</div>
+
+</section>
+
+<section>
+
+<div class="cta">
+
+<h2>Together, We Help Families Feel Less Alone.</h2>
+
+<p>
+Every donation helps us provide hope, comfort, and encouragement to children battling cancer.
+</p>
+
+<a href="#">Donate Now</a>
+
+</div>
+
+</section>
+
+<section id="contact">
+
+<div>
+
+<h2>Let's Talk.</h2>
+
+<p>
+Want to partner, volunteer, or donate? We'd love to hear from you.
+</p>
+
+<p><strong>Instagram:</strong> @teamcourageforkids</p>
+
+<p><strong>Facebook:</strong> Courage for Kids</p>
+
+</div>
+
+<form>
+
+<input type="text" placeholder="First Name">
+
+<input type="text" placeholder="Last Name">
+
+<input type="email" placeholder="Email">
+
+<textarea placeholder="Your Message"></textarea>
+
+<button>Send Message</button>
+
+</form>
+
+</section>
+
+<footer>
+
+<h3>Courage for Kids</h3>
+
+<p>Bringing hope, strength, and support to kids fighting cancer—one child at a time.</p>
+
+<br>
+
+<a href="#">Instagram</a>
+
+<a href="#">Facebook</a>
+
+<p style="margin-top:20px;">
+© 2026 Courage for Kids. All rights reserved.
+</p>
+
+</footer>
+
+</body>
+</html>
