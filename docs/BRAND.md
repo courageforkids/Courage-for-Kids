@@ -47,3 +47,17 @@ Heart with a raised-arms figure and a flowing yellow cape, beside "Courage for K
 ## Templates (Canva)
 
 See the Canva folder **"CFK Brand System 2026"** for working templates. Each new design starts from a template, never from scratch, so posts stay consistent.
+
+## Mascot concept: "Sunny"
+
+An original companion to the existing superhero-kid illustration: **Sunny is a living, huggable superhero cape**, a cozy golden-yellow blanket-cape with a navy heart emblem, big friendly eyes and stubby cape-corner arms. It ties three brand ideas into one character:
+
+- **The cape** in the logo (courage),
+- **The blanket** in every Courage Box (comfort),
+- **The hug** (no one fights alone).
+
+Uses: Courage Box insert cards ("Sunny came to keep you company"), sticker sheets, coloring pages, a plush version for sponsors to fund, Instagram "Sunny says" tips, event photo-op cutout. Concept art is in the Canva folder (draft for leadership review; not approved or published).
+
+## Social templates (code-built)
+
+`brand/social/templates.html` holds pixel-exact templates (Fact Friday, Sponsor a Courage Box, Holiday, What's Inside story, Event flyer). Edit the copy and run `node brand/social/render.cjs` (after `npm run build`) to export PNGs into `brand/social/out/`. Upload them to Canva to use as editable backgrounds.
