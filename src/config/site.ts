@@ -20,16 +20,15 @@ export const site = {
 
   /** CONFIRM: Canva "Our Mission" says 2022; the old draft site said 2024. Left blank until confirmed. */
   foundedYear: '',
-  /** CONFIRM: add the EIN to show it on the Donate page and footer. */
-  ein: '',
+  /** From the org's own correspondence (Sep 2026). */
+  ein: '39-3833022',
   /** 501(c)(3) status as stated by leadership. */
   is501c3: true,
 
   social: {
     instagram: 'https://www.instagram.com/teamcourageforkids/',
     instagramHandle: '@teamcourageforkids',
-    /** CONFIRM: Facebook page URL. Hidden while empty. */
-    facebook: '',
+    facebook: 'https://www.facebook.com/people/Courage-for-Kids/61584740880644/',
   },
 
   donate: {

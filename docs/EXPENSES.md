@@ -10,7 +10,7 @@ Prices researched October 2026. Third-party figures are marked; confirm on the v
 | Professional email (`jacob@teamcourageforkids.org`) | $17/mo | Provider to confirm (likely Google Workspace or Microsoft 365 via Wix). |
 | ChatGPT Plus | $20/mo | |
 | Claude Pro | $20/mo | |
-| **Onepage GmbH "Projects: Essential"** | **$19.90/mo** | Not on the list you gave me; found in the inbox. |
+| **Onepage GmbH "Projects: Essential"** | **$19.90/mo** | Not on the list you gave me; hosts the second site `courage-for-kids.onepage.me`. |
 | Domain via Wix | $32.80/yr | |
 | **Total** | **≈ $102/mo + $33/yr ≈ $1,256/yr** | |
 
@@ -21,7 +21,7 @@ Prices researched October 2026. Third-party figures are marked; confirm on the v
 | Website → Cloudflare Pages (this repo) | $0 | $300 | Low | Keep Wix paid until two weeks after launch; DNS revert is instant. See [DEPLOYMENT.md](DEPLOYMENT.md). |
 | Email → **Google Workspace for Nonprofits** | $0 (up to 2,000 users) | $204 | Medium | Run old and new mailboxes in parallel; MX records changed only after migration is verified. |
 | Drop **one** AI subscription (keep Claude) | $20 | $240 | Low | Re-subscribe any time. |
-| Onepage: cancel if unused | $0 | $239 | Low | Re-subscribe. The new website covers landing pages and Mailchimp free covers the newsletter. |
+| Onepage: cancel after launch | $0 | $239 | Low | Re-subscribe. The new website replaces the Onepage site. |
 | Domain → Cloudflare Registrar | ≈ $10–11/yr *(third-party price)* | ≈ $22 | Low | Transfer adds a year; no downtime when DNS is already on Cloudflare. |
 | **Canva for Nonprofits** | $0 for up to 50 members | Protects against paying for Pro/Teams | None | Apply once verified. |
 | **New total** | **≈ $20/mo + $11/yr ≈ $251/yr** | **≈ $1,000/yr** | | |
@@ -34,7 +34,7 @@ Goodstack declined Courage for Kids for Claude for Nonprofits on Oct 27. Google 
 - Name or EIN mismatch between the application and the IRS record (e.g. "Courage for Kids" vs. "Team Courage for Kids Inc").
 - Registering with a Gmail address instead of an address on the organization's domain.
 
-**Needed from you:** the EIN and IRS determination letter, so I can prepare the appeal and the Google for Nonprofits application text.
+**Needed from you:** the IRS determination letter (the EIN, 39-3833022, is already on file), so I can prepare the appeal and the Google for Nonprofits application text.
 
 ## AI tools
 

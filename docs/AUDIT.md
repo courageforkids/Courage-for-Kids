@@ -40,15 +40,14 @@ Hidden on the site until confirmed; set them in `src/config/site.ts` / `content.
 | Item | Why it's blank |
 | --- | --- |
 | Founding year | Canva "Our Mission" says **2022**; the old draft said **2024**. |
-| EIN | Not found in accessible records. |
 | Impact numbers | The old draft listed 48 families, 48 boxes, $2,300+ raised in 2025. Unverified, so not shown. |
 | Team | The old draft listed different names (Daniel, Davis, Colin, Cooper). The site uses the current leadership list, first names only. |
-| Zeffy / PayPal donation links, Facebook URL, Mailchimp signup URL | Not found in email. |
+| Zeffy / PayPal donation links, Mailchimp signup URL | Not found in email. (EIN 39-3833022 and the Facebook page were found and added.) |
 | Hospital and corporate partners | Correspondence exists, but no partner is named on the site without written approval. |
 | Product-donation policy ("new, unused items only") and the parent/guardian note on the volunteer form | Sensible defaults I added; confirm they match how you operate. |
 
 ## 6. Other findings
 
-- **Unlisted subscription:** Onepage GmbH, **$19.90/month** ("Projects: Essential", started Jul 29, 2026). Confirm whether it's still used.
+- **Unlisted subscription:** Onepage GmbH, **$19.90/month** ("Projects: Essential", since Jul 29, 2026). This hosts a second website, `courage-for-kids.onepage.me`. The new site replaces it too.
 - **Claude for Nonprofits application declined** by Goodstack on Oct 27, 2026. Google Workspace for Nonprofits and other discounts use the same Goodstack verification, so fixing this unblocks several savings (see [EXPENSES.md](EXPENSES.md)).
 - Security: the Gmail account received a Google "Security alert" and a GitHub device-verification email on Oct 28. Worth a glance to confirm both were you.
