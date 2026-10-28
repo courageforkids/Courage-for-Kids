@@ -1,0 +1,126 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import InquiryForm from '../components/InquiryForm.astro';
+import Button from '../components/Button.astro';
+import Icon from '../components/Icon.astro';
+import { donateHref, site } from '../config/site';
+
+const options = [
+  { icon: 'heart' as const, title: 'Donate', body: 'Fund Courage Boxes and family support.', href: donateHref },
+  { icon: 'hands' as const, title: 'Volunteer', body: 'Pack boxes, staff events, create content.', href: '#volunteer' },
+  { icon: 'star' as const, title: 'Sponsor', body: 'Put your business behind a cause that matters.', href: '#partner' },
+  { icon: 'gift' as const, title: 'Donate products', body: 'Stock our boxes with new comfort items.', href: '#products' },
+  { icon: 'megaphone' as const, title: 'Host a fundraiser', body: 'Run a drive at school, work, or a local restaurant.', href: '#fundraise' },
+  { icon: 'instagram' as const, title: 'Spread the word', body: `Follow and share ${site.social.instagramHandle}.`, href: site.social.instagram },
+];
+---
+
+<BaseLayout title="Get involved" description="Volunteer, sponsor, donate products, or host a fundraiser with Courage for Kids.">
+  <PageHero eyebrow="Get involved" lede="Whether you have an hour, a skill, a business, or a big idea, there’s a place for you here." next="cream">
+    Be part of their <em>courage.</em>
+  </PageHero>
+
+  <section class="section--tight">
+    <div class="container">
+      <ul class="options" role="list">
+        {options.map((o) => (
+          <li data-reveal>
+            <a class="option" href={o.href} {...(o.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}>
+              <span class="option__icon"><Icon name={o.icon} size={26} /></span>
+              <span class="option__text"><strong>{o.title}</strong>{o.body}</span>
+              <Icon name="arrow" size={20} class="option__arrow" />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--white" id="volunteer">
+    <div class="container split">
+      <div class="split__copy" data-reveal>
+        <p class="eyebrow">Volunteer</p>
+        <h2>Lend a hand, <em class="display">join the team.</em></h2>
+        <p class="lede">Courage for Kids is run by young people, and we’re always looking for more.</p>
+        <ul class="ticks" role="list">
+          <li><Icon name="check" /> Packing and preparing Courage Boxes</li>
+          <li><Icon name="check" /> Helping at events and fundraisers</li>
+          <li><Icon name="check" /> Design, photography, and social media</li>
+          <li><Icon name="check" /> Writing, outreach, and school clubs</li>
+        </ul>
+        <p class="small">Our Volunteer Coordinator reviews every sign-up and follows up by email.</p>
+      </div>
+      <div data-reveal><InquiryForm type="volunteer" submitLabel="Sign me up" /></div>
+    </div>
+  </section>
+
+  <section class="section" id="partner">
+    <div class="container split split--flip">
+      <div class="split__copy" data-reveal>
+        <p class="eyebrow">Sponsors & partners</p>
+        <h2>Partner with a mission <em class="display">kids lead.</em></h2>
+        <p class="lede">
+          Businesses, schools, foundations, and hospitals help us reach more families. We’d love to build something
+          together.
+        </p>
+        <div class="partner-types">
+          <div><Icon name="star" /><strong>Corporate sponsorship</strong><span>Underwrite boxes, events, or a campaign.</span></div>
+          <div id="products"><Icon name="gift" /><strong>Product donations</strong><span>New comfort items, activities, and supplies.</span></div>
+          <div><Icon name="hospital" /><strong>Hospitals & care teams</strong><span>Bring Courage Boxes to your patients.</span></div>
+          <div id="fundraise"><Icon name="megaphone" /><strong>Host a fundraiser</strong><span>Restaurant nights, school drives, workplace giving.</span></div>
+        </div>
+        <p class="small">Our Fundraising Director handles sponsorship and fundraising inquiries.</p>
+      </div>
+      <div data-reveal><InquiryForm type="partner" submitLabel="Send inquiry" /></div>
+    </div>
+  </section>
+
+  <section class="section--tight section--navy">
+    <div class="container cta-row" data-reveal>
+      <h2>Ready to give today?</h2>
+      <Button href={donateHref} size="lg" arrow>Donate</Button>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .options { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); margin: 0; padding: 0; list-style: none; }
+  .option {
+    display: flex; align-items: center; gap: 1rem;
+    height: 100%;
+    padding: 1.25rem 1.4rem;
+    background: var(--white);
+    border: 2px solid transparent;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    color: var(--ink);
+    text-decoration: none;
+    transition: border-color 0.15s, transform 0.2s var(--ease);
+  }
+  .option:hover { border-color: var(--navy-900); transform: translateY(-2px); }
+  .option__icon { display: grid; place-items: center; flex-shrink: 0; width: 3.2rem; height: 3.2rem; border-radius: 50%; background: var(--yellow); color: var(--navy-900); }
+  .option__text { display: flex; flex-direction: column; font-size: 0.95rem; color: var(--ink-soft); flex-grow: 1; }
+  .option__text strong { font-family: var(--font-display); font-size: 1.25rem; color: var(--navy-900); }
+  .option :global(.option__arrow) { color: var(--navy); flex-shrink: 0; }
+
+  .split { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(2rem, 1rem + 4vw, 5rem); align-items: start; }
+  .split--flip .split__copy { order: 2; }
+  .split__copy { position: sticky; top: 7rem; }
+  .ticks { display: grid; gap: 0.7rem; margin: 1.5rem 0; padding: 0; list-style: none; }
+  .ticks li { display: flex; gap: 0.7rem; align-items: center; font-weight: 600; }
+  .ticks :global(.icon) { flex-shrink: 0; padding: 0.2rem; width: 1.7rem; height: 1.7rem; border-radius: 50%; background: var(--yellow); color: var(--navy-900); }
+  .small { font-size: var(--step--1); color: var(--ink-soft); }
+  .partner-types { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); margin: 1.5rem 0; }
+  .partner-types > div { display: grid; gap: 0.2rem; padding: 1.1rem; background: var(--white); border-radius: var(--radius-sm); border: 1px solid var(--line); scroll-margin-top: 7rem; }
+  .partner-types :global(.icon) { color: var(--navy); margin-bottom: 0.3rem; }
+  .partner-types strong { color: var(--navy-900); }
+  .partner-types span { font-size: 0.92rem; color: var(--ink-soft); }
+  .cta-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem; }
+  .cta-row h2 { margin: 0; font-size: var(--step-3); }
+  @media (max-width: 60rem) {
+    .split { grid-template-columns: 1fr; }
+    .split--flip .split__copy { order: 0; }
+    .split__copy { position: static; }
+  }
+</style>

@@ -1,0 +1,74 @@
+---
+/** Decorative hero illustration: an open Courage Box with the heart-and-cape rising out of it. */
+interface Props { class?: string }
+const { class: className } = Astro.props;
+---
+
+<svg class:list={['hero-art', className]} viewBox="0 0 480 450" aria-hidden="true" focusable="false">
+  <defs>
+    <clipPath id="ha-box"><rect x="104" y="250" width="272" height="168" rx="16" /></clipPath>
+  </defs>
+
+  <!-- backdrop -->
+  <circle cx="246" cy="238" r="196" fill="#E3EEF6" />
+  <path d="M60 330c40-30 85-20 120 0s90 30 150-10 95-20 110 10" fill="none" stroke="#FED438" stroke-width="10" stroke-linecap="round" opacity=".9" />
+
+  <!-- rising heart + cape -->
+  <g class="hero-art__float">
+    <path d="M196 170c-34 20-56 52-62 92 26-18 54-27 86-28l-24-64Z" fill="#FED438" />
+    <path d="M196 170c-34 20-56 52-62 92" fill="none" stroke="#0B2740" stroke-width="3" stroke-linecap="round" opacity=".25" />
+    <path
+      d="M246 262c-58-44-86-74-86-109 0-26 20-46 46-46 17 0 32 9 40 23 8-14 23-23 40-23 26 0 46 20 46 46 0 35-28 65-86 109Z"
+      fill="#004F81"
+    />
+    <circle cx="246" cy="146" r="17" fill="#FBF6EC" />
+    <path d="M213 158c9 13 20 20 33 20s24-7 33-20c3 5 2.5 10.5-1.2 15.5L261 194v18l-15 15-15-15v-18l-17.8-20.5c-3.7-5-4.2-10.5-1.2-15.5Z" fill="#FBF6EC" />
+  </g>
+
+  <!-- open lid -->
+  <g transform="rotate(-13 240 222)">
+    <rect x="92" y="200" width="296" height="54" rx="12" fill="#003B61" />
+    <rect x="222" y="200" width="36" height="54" fill="#FED438" />
+  </g>
+
+  <!-- box -->
+  <rect x="104" y="250" width="272" height="168" rx="16" fill="#004F81" />
+  <g clip-path="url(#ha-box)">
+    <rect x="104" y="250" width="272" height="20" fill="#0B2740" opacity=".35" />
+    <rect x="222" y="250" width="36" height="168" fill="#FED438" />
+  </g>
+  <text x="166" y="356" font-size="17" font-weight="800" letter-spacing="3.5" fill="#FBF6EC" text-anchor="middle" style="font-family: var(--font-body)">COURAGE</text>
+  <text x="314" y="356" font-size="17" font-weight="800" letter-spacing="3.5" fill="#FBF6EC" text-anchor="middle" style="font-family: var(--font-body)">BOX</text>
+
+  <!-- note card -->
+  <g class="hero-art__note" transform="rotate(9 392 150)">
+    <rect x="330" y="112" width="128" height="84" rx="8" fill="#FFFFFF" stroke="#0B2740" stroke-width="2.5" />
+    <path d="M346 134h96" stroke="#E4DCCB" stroke-width="2" />
+    <text x="394" y="152" font-size="19" fill="#004F81" text-anchor="middle" style="font-family: var(--font-display); font-style: italic; font-weight: 600">you are</text>
+    <text x="394" y="176" font-size="19" fill="#004F81" text-anchor="middle" style="font-family: var(--font-display); font-style: italic; font-weight: 600">so brave</text>
+  </g>
+
+  <!-- sparkles -->
+  <g fill="#FED438" stroke="#0B2740" stroke-width="2" stroke-linejoin="round">
+    <path class="hero-art__twinkle" d="M96 120c2 14 8 20 22 22-14 2-20 8-22 22-2-14-8-20-22-22 14-2 20-8 22-22Z" />
+    <path class="hero-art__twinkle hero-art__twinkle--late" d="M404 262c1.5 10 6 14.5 16 16-10 1.5-14.5 6-16 16-1.5-10-6-14.5-16-16 10-1.5 14.5-6 16-16Z" />
+  </g>
+  <path d="M150 74c4 0 7-3 7-7s3-7 7-7c-4 0-7-3-7-7s-3 7-7 7c4 0 7 3 7 7" fill="none" stroke="#004F81" stroke-width="2.5" stroke-linecap="round" />
+  <circle cx="352" cy="66" r="6" fill="none" stroke="#004F81" stroke-width="2.5" />
+  <circle cx="70" cy="244" r="4" fill="#004F81" />
+</svg>
+
+<style>
+  .hero-art { width: 100%; height: auto; overflow: visible; }
+  .hero-art__float { animation: float 6s ease-in-out infinite; transform-origin: 246px 200px; }
+  .hero-art__twinkle { animation: twinkle 3.2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .hero-art__twinkle--late { animation-delay: 1.4s; }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes twinkle {
+    0%, 100% { transform: scale(1) rotate(0); }
+    50% { transform: scale(0.82) rotate(12deg); }
+  }
+</style>

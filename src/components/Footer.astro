@@ -1,0 +1,135 @@
+---
+import { nav, site, donateHref } from '../config/site';
+import LogoMark from './LogoMark.astro';
+import Icon from './Icon.astro';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div class="site-footer__brand">
+      <a href="/" class="footer-brand" aria-label={`${site.name}, home`}>
+        <LogoMark size={52} />
+        <span>{site.name}</span>
+      </a>
+      <p class="footer-tagline">{site.tagline}</p>
+      <p class="footer-small">
+        A youth-led {site.is501c3 && '501(c)(3) '}nonprofit based in {site.location}, supporting children
+        battling pediatric cancer and their families.
+      </p>
+    </div>
+
+    <nav aria-label="Footer">
+      <h2 class="footer-heading">Explore</h2>
+      <ul role="list">
+        {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        <li><a href="/events/">Events</a></li>
+      </ul>
+    </nav>
+
+    <div>
+      <h2 class="footer-heading">Help out</h2>
+      <ul role="list">
+        <li><a href={donateHref}>Donate</a></li>
+        <li><a href="/get-involved/#volunteer">Volunteer</a></li>
+        <li><a href="/get-involved/#partner">Sponsor or partner</a></li>
+        <li><a href="/get-involved/#products">Donate products</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="footer-heading">Say hello</h2>
+      <ul role="list" class="footer-contact">
+        <li><a href={`mailto:${site.email}`}><Icon name="mail" size={18} /> <span set:html={site.email.replace('@', '<wbr>@')} /></a></li>
+        <li>
+          <a href={site.social.instagram} rel="noopener" target="_blank">
+            <Icon name="instagram" size={18} /> {site.social.instagramHandle}
+          </a>
+        </li>
+        {site.social.facebook && (
+          <li><a href={site.social.facebook} rel="noopener" target="_blank"><Icon name="facebook" size={18} /> Facebook</a></li>
+        )}
+        <li><span class="footer-muted"><Icon name="pin" size={18} /> {site.location}</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container site-footer__legal">
+    <p>
+      © {year} {site.name}.{' '}
+      {site.is501c3 && <>Courage for Kids is a 501(c)(3) nonprofit organization{site.ein ? `, EIN ${site.ein}` : ''}; donations are tax-deductible as allowed by law.</>}
+    </p>
+    <p><a href="/privacy/">Privacy</a></p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--navy-900);
+    color: #c9d8e6;
+    padding-block: clamp(3.5rem, 2.5rem + 4vw, 5.5rem) 2rem;
+    position: relative;
+  }
+  .site-footer::before {
+    content: '';
+    position: absolute;
+    inset: -1px 0 auto 0;
+    height: 6px;
+    background: repeating-linear-gradient(90deg, var(--yellow) 0 2.5rem, transparent 2.5rem 3.25rem);
+  }
+  .site-footer a { color: #e8f0f7; text-decoration: none; }
+  .site-footer a:hover { color: var(--yellow); text-decoration: underline; }
+  .site-footer__grid {
+    display: grid;
+    grid-template-columns: 1.6fr repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+  .footer-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.6rem;
+    color: var(--white) !important;
+  }
+  .footer-tagline {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: var(--step-2);
+    color: var(--yellow);
+    margin: 1.25rem 0 0.5rem;
+  }
+  .footer-small { font-size: var(--step--1); max-width: 26rem; }
+  .footer-heading {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 1rem;
+  }
+  .site-footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; }
+  .footer-contact a, .footer-muted { display: inline-flex; align-items: center; gap: 0.5rem; }
+  .site-footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 3.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgb(255 255 255 / 0.12);
+    font-size: var(--step--1);
+  }
+  .site-footer__legal p { margin: 0; }
+  @media (max-width: 56rem) {
+    .site-footer__grid { grid-template-columns: 1fr 1fr; }
+    .site-footer__brand { grid-column: 1 / -1; }
+  }
+  @media (max-width: 30rem) {
+    .site-footer__grid { grid-template-columns: 1fr; }
+  }
+</style>

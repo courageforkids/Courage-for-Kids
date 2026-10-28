@@ -1,0 +1,45 @@
+---
+/** Interior-page header: eyebrow, display title (slot), lede, optional actions. */
+interface Props {
+  eyebrow: string;
+  lede?: string;
+  /** Colour of the section that follows, so the cape edge blends into it. */
+  next?: 'white' | 'cream' | 'sky';
+}
+const { eyebrow, lede, next = 'white' } = Astro.props;
+const capeColor = { white: 'var(--white)', cream: 'var(--cream)', sky: 'var(--sky)' }[next];
+---
+
+<section class="page-hero" style={`--cape: ${capeColor}`}>
+  <svg class="page-hero__spark page-hero__spark--a" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c.8 5.6 3.4 8.2 9 9-5.6.8-8.2 3.4-9 9-.8-5.6-3.4-8.2-9-9 5.6-.8 8.2-3.4 9-9Z" /></svg>
+  <svg class="page-hero__spark page-hero__spark--b" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c.8 5.6 3.4 8.2 9 9-5.6.8-8.2 3.4-9 9-.8-5.6-3.4-8.2-9-9 5.6-.8 8.2-3.4 9-9Z" /></svg>
+  <div class="container page-hero__inner">
+    <p class="eyebrow">{eyebrow}</p>
+    <h1><slot /></h1>
+    {lede && <p class="lede">{lede}</p>}
+    {Astro.slots.has('actions') && <div class="page-hero__actions"><slot name="actions" /></div>}
+  </div>
+  <svg class="page-hero__cape" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 60V28c180 26 420 34 720 10S1260 2 1440 22v38Z" fill="currentColor" />
+  </svg>
+</section>
+
+<style>
+  .page-hero {
+    position: relative;
+    padding-block: clamp(3.5rem, 2.5rem + 4vw, 6rem) clamp(4.5rem, 3.5rem + 4vw, 7rem);
+    background: var(--cream-200);
+    overflow: hidden;
+  }
+  .page-hero__spark { position: absolute; fill: var(--yellow); stroke: var(--navy-900); stroke-width: 1.2; }
+  .page-hero__spark--a { width: 2.6rem; top: 18%; left: 8%; transform: rotate(-12deg); }
+  .page-hero__spark--b { width: 1.6rem; bottom: 28%; right: 9%; transform: rotate(10deg); }
+  @media (max-width: 40rem) { .page-hero__spark { display: none; } }
+  .page-hero__inner { max-width: 52rem; margin-inline: auto; text-align: center; }
+  .page-hero h1 { font-size: var(--step-5); margin-bottom: 1.25rem; }
+  .page-hero h1 :global(em) { font-style: italic; font-weight: 500; color: var(--navy); }
+  .page-hero .eyebrow { justify-content: center; }
+  .page-hero .lede { max-width: 40rem; margin-inline: auto; }
+  .page-hero__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-top: 2rem; }
+  .page-hero__cape { color: var(--cape); position: absolute; left: 0; bottom: -1px; width: 100%; height: 3.5rem; }
+</style>

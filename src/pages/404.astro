@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+---
+
+<BaseLayout title="Page not found" noindex>
+  <section class="section">
+    <div class="container narrow center">
+      <p class="eyebrow">404</p>
+      <h1>This page flew <em class="display">off.</em></h1>
+      <p class="lede">We couldn’t find what you were looking for. It may have moved when we rebuilt our site.</p>
+      <div class="actions">
+        <Button href="/" arrow>Go home</Button>
+        <Button href="/contact/" variant="ghost">Contact us</Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-top: 2rem; }
+</style>

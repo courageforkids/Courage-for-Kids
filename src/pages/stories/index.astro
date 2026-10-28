@@ -1,0 +1,30 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import StoryCard from '../../components/StoryCard.astro';
+import DonateBand from '../../components/DonateBand.astro';
+
+const stories = (await getCollection('stories', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout title="Stories" description="Stories, updates, and notes from the Courage for Kids team.">
+  <PageHero eyebrow="Stories & updates" lede="Updates from our team and the community that makes this work possible. Family stories are shared only with permission." next="cream">
+    Moments of <em>courage.</em>
+  </PageHero>
+
+  <section class="section--tight">
+    <h2 class="visually-hidden">All stories</h2>
+    <div class="container grid grid--2 stories">
+      {stories.map((story) => <StoryCard story={story} />)}
+    </div>
+  </section>
+
+  <DonateBand />
+</BaseLayout>
+
+<style>
+  .stories { padding-bottom: 2rem; }
+  .stories :global(.story) { background: var(--white); }
+</style>

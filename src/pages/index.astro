@@ -1,0 +1,289 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import HeroArt from '../components/HeroArt.astro';
+import ProgramCard from '../components/ProgramCard.astro';
+import DonateBand from '../components/DonateBand.astro';
+import Icon from '../components/Icon.astro';
+import StoryCard from '../components/StoryCard.astro';
+import { site, donateHref } from '../config/site';
+import { mission, programs, whyComfort, comfortSource, founderNote, waysToHelp, impactStats } from '../config/content';
+
+const stories = (await getCollection('stories', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 2);
+
+const marquee = ['Courage Boxes', 'Parent Boxes', 'Family Support', 'Hospital Partnerships', 'Community Events', 'Awareness'];
+---
+
+<BaseLayout>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero__grid">
+      <div class="hero__copy">
+        <p class="eyebrow">Youth-led nonprofit · {site.location}</p>
+        <h1>Their fight. <span class="swash">Our mission.</span></h1>
+        <p class="lede">
+          Courage for Kids brings comfort, encouragement, and moments of joy to children battling cancer, and to the
+          families walking alongside them.
+        </p>
+        <div class="hero__actions">
+          <Button href={donateHref} size="lg" arrow>Donate</Button>
+          <Button href="/programs/" variant="ghost" size="lg">See what we do</Button>
+        </div>
+        <ul class="hero__chips" role="list">
+          <li><Icon name="box" size={18} /> Courage Boxes</li>
+          <li><Icon name="heart" size={18} /> Parent Boxes</li>
+          <li><Icon name="school" size={18} /> Run by students</li>
+        </ul>
+      </div>
+      <div class="hero__art">
+        <HeroArt />
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      {[0, 1].map(() => (
+        <span class="marquee__group">
+          {marquee.map((word) => <span class="marquee__item">{word}<Icon name="sparkle" size={22} /></span>)}
+        </span>
+      ))}
+    </div>
+  </div>
+
+  <!-- Mission -->
+  <section class="section section--white">
+    <div class="container mission">
+      <div class="mission__head" data-reveal>
+        <p class="eyebrow">Our mission</p>
+        <h2>No child should face cancer <em class="display">alone.</em></h2>
+        <p class="lede">{mission.why}</p>
+      </div>
+      <ol class="mission__list" role="list">
+        <li data-reveal>
+          <span class="mission__num">01</span>
+          <h3>Our what</h3>
+          <p>{mission.what}</p>
+        </li>
+        <li data-reveal>
+          <span class="mission__num">02</span>
+          <h3>Our how</h3>
+          <p>{mission.how}</p>
+        </li>
+        <li data-reveal>
+          <span class="mission__num">03</span>
+          <h3>Our why</h3>
+          <p>Support goes beyond treatment. It’s found in moments of encouragement, acts of kindness, and communities that stand beside families when they need it most.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Small comforts matter -->
+  <section class="section section--sky comforts">
+    <div class="container">
+      <div class="comforts__head" data-reveal>
+        <h2 class="comforts__title">small comforts <span class="swash">matter.</span></h2>
+        <div class="comforts__equation" aria-hidden="true">
+          <span class="face face--sad"></span><span>+</span>
+          <span class="comforts__box"><Icon name="box" size={34} /></span><span>=</span>
+          <span class="face face--happy"></span>
+        </div>
+      </div>
+      <div class="grid grid--3">
+        {whyComfort.map((item) => (
+          <article class="comfort" data-reveal>
+            <h3>{item.title}</h3>
+            <p>{item.body}</p>
+          </article>
+        ))}
+      </div>
+      <p class="comforts__source">
+        Educational context: <a href={comfortSource.url} rel="noopener" target="_blank">{comfortSource.label}</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- Programs -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <div>
+          <p class="eyebrow">What we do</p>
+          <h2>Comfort you can <em class="display">hold.</em></h2>
+        </div>
+        <p class="lede">We turn our community’s generosity into tangible support, delivered by young people who care.</p>
+      </div>
+      <div class="grid grid--3">
+        {programs.map((program, i) => <ProgramCard program={program} index={i} />)}
+      </div>
+    </div>
+  </section>
+
+  {impactStats.length > 0 && (
+    <section class="section--tight section--white">
+      <div class="container stats">
+        {impactStats.map((stat) => (
+          <div class="stat" data-reveal>
+            <span class="stat__value">{stat.value}</span>
+            <span class="stat__label">{stat.label}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- Founder -->
+  <section class="section section--navy founder">
+    <div class="container founder__inner" data-reveal>
+      <svg class="founder__quote-mark" viewBox="0 0 64 48" aria-hidden="true"><path d="M0 48V28C0 12 8 2 26 0l2 7C18 10 14 16 14 24h12v24H0Zm36 0V28C36 12 44 2 62 0l2 7c-10 3-14 9-14 17h12v24H36Z" fill="currentColor" /></svg>
+      <blockquote>
+        <p>{founderNote.quote}</p>
+      </blockquote>
+      <p class="founder__by"><strong>{founderNote.name}</strong>, {founderNote.role}</p>
+      <a class="founder__link" href="/stories/a-note-from-our-founder/">Read the full note <Icon name="arrow" size={18} /></a>
+    </div>
+  </section>
+
+  <!-- Ways to help -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head section-head--center" data-reveal>
+        <p class="eyebrow">Get involved</p>
+        <h2>Be part of their <em class="display">courage.</em></h2>
+      </div>
+      <div class="grid grid--3 help">
+        {waysToHelp.map((way) => (
+          <article class="help__card" data-reveal>
+            <span class="help__icon"><Icon name={way.icon} size={28} /></span>
+            <h3>{way.title}</h3>
+            <p>{way.body}</p>
+            <Button href={way.title === 'Give' ? donateHref : way.href} variant={way.title === 'Give' ? 'primary' : 'navy'} arrow>
+              {way.cta}
+            </Button>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Stories -->
+  {stories.length > 0 && (
+    <section class="section section--white">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div>
+            <p class="eyebrow">Stories & updates</p>
+            <h2>From the <em class="display">team.</em></h2>
+          </div>
+          <Button href="/stories/" variant="ghost" arrow>All stories</Button>
+        </div>
+        <div class="grid grid--2">
+          {stories.map((story) => <StoryCard story={story} />)}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <DonateBand />
+</BaseLayout>
+
+<style>
+  /* Hero */
+  .hero { padding-block: clamp(2.5rem, 1.5rem + 4vw, 5rem) clamp(3rem, 2rem + 4vw, 5.5rem); overflow: hidden; }
+  .hero__grid { display: grid; grid-template-columns: 1.1fr 0.9fr; align-items: center; gap: clamp(2rem, 1rem + 4vw, 4rem); }
+  .hero h1 { font-size: clamp(3rem, 1.8rem + 5.6vw, 6.4rem); line-height: 0.98; letter-spacing: -0.03em; margin-bottom: 1.5rem; }
+  .hero h1 .swash { font-style: italic; font-weight: 500; color: var(--navy); }
+  .hero .lede { max-width: 34rem; font-size: var(--step-1); }
+  .hero__actions { display: flex; flex-wrap: wrap; gap: 0.85rem; margin-top: 2rem; }
+  .hero__chips { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 2rem 0 0; padding: 0; list-style: none; }
+  .hero__chips li {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    padding: 0.4rem 0.85rem;
+    background: var(--white);
+    border: 1.5px solid var(--line);
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--navy-900);
+  }
+  .hero__art { max-width: 34rem; justify-self: center; width: 100%; }
+  @media (max-width: 56rem) {
+    .hero__grid { grid-template-columns: 1fr; }
+    .hero__art { max-width: 24rem; order: -1; }
+  }
+
+  /* Marquee */
+  .marquee {
+    background: var(--yellow);
+    border-block: 2px solid var(--navy-900);
+    overflow: hidden;
+    transform: rotate(-1.2deg);
+    margin-inline: -1rem;
+  }
+  .marquee__track { display: flex; width: max-content; animation: marquee 38s linear infinite; }
+  .marquee__group { display: flex; }
+  .marquee__item {
+    display: inline-flex; align-items: center; gap: 1.5rem;
+    padding: 0.9rem 0 0.9rem 1.5rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 600;
+    font-size: var(--step-2);
+    color: var(--navy-900);
+    white-space: nowrap;
+  }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .marquee__track { animation: none; } }
+
+  /* Mission */
+  .mission { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(2rem, 1rem + 4vw, 5rem); align-items: start; }
+  .mission__head { position: sticky; top: 7rem; }
+  .mission__list { display: grid; gap: 1.25rem; margin: 0; padding: 0; list-style: none; }
+  .mission__list li { padding: 1.75rem; border-radius: var(--radius); background: var(--cream); border: 1px solid var(--line); }
+  .mission__list h3 { font-size: var(--step-2); margin-bottom: 0.4rem; }
+  .mission__list p { margin: 0; }
+  .mission__num { display: block; font-weight: 800; font-size: 0.85rem; letter-spacing: 0.12em; color: var(--navy); margin-bottom: 0.4rem; }
+  @media (max-width: 56rem) {
+    .mission { grid-template-columns: 1fr; }
+    .mission__head { position: static; }
+  }
+
+  /* Comforts */
+  .comforts__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 2rem; margin-bottom: 3rem; }
+  .comforts__title { font-style: italic; font-weight: 500; font-size: clamp(2.8rem, 1.6rem + 5vw, 5.6rem); line-height: 0.95; margin: 0; max-width: 12ch; }
+  .comforts__equation { display: flex; align-items: center; gap: 0.9rem; font-family: var(--font-display); font-size: 2.4rem; color: var(--navy-900); }
+  .comforts__box { display: grid; place-items: center; width: 4.4rem; height: 4.4rem; border-radius: 1.2rem; background: var(--navy); color: var(--yellow); transform: rotate(-6deg); }
+  .face { position: relative; width: 4rem; height: 4rem; border: 2.5px solid var(--navy-900); border-radius: 50%; background: var(--white); }
+  .face::before { content: ''; position: absolute; top: 34%; left: 28%; width: 0.4rem; height: 0.4rem; border-radius: 50%; background: var(--navy-900); box-shadow: 1.3rem 0 0 var(--navy-900); }
+  .face::after { content: ''; position: absolute; left: 50%; width: 1.7rem; height: 0.85rem; border: 2.5px solid var(--navy-900); transform: translateX(-50%); }
+  .face--happy::after { top: 48%; border-top: 0; border-radius: 0 0 2rem 2rem; }
+  .face--sad::after { top: 60%; border-bottom: 0; border-radius: 2rem 2rem 0 0; }
+  .comfort { padding: 1.75rem; background: var(--white); border-radius: var(--radius); border-top: 6px solid var(--yellow); box-shadow: var(--shadow); }
+  .comfort h3 { font-size: var(--step-1); }
+  .comfort p { margin: 0; color: var(--ink-soft); }
+  .comforts__source { margin: 2rem 0 0; font-size: var(--step--1); color: var(--ink-soft); }
+
+  /* Stats */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 2rem; text-align: center; }
+  .stat__value { display: block; font-family: var(--font-display); font-size: var(--step-4); font-weight: 650; color: var(--navy); }
+  .stat__label { font-weight: 600; color: var(--ink-soft); }
+
+  /* Founder */
+  .founder__inner { max-width: 54rem; text-align: center; }
+  .founder__quote-mark { width: 3.5rem; margin: 0 auto 1.5rem; color: var(--yellow); }
+  .founder blockquote { margin: 0; }
+  .founder blockquote p { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: var(--step-3); line-height: 1.25; color: var(--white); }
+  .founder__by { margin-top: 1.5rem; color: #c9d8e6; }
+  .founder__by strong { color: var(--white); }
+  .founder__link { display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 700; }
+
+  /* Help */
+  .help__card { display: flex; flex-direction: column; align-items: flex-start; padding: 2rem; background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow); }
+  .help__card p { color: var(--ink-soft); flex-grow: 1; }
+  .help__icon { display: grid; place-items: center; width: 3.4rem; height: 3.4rem; margin-bottom: 1.25rem; border-radius: 50%; background: var(--yellow); color: var(--navy-900); }
+</style>

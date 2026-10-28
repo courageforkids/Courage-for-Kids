@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import InquiryForm from '../components/InquiryForm.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../config/site';
+---
+
+<BaseLayout title="Contact" description="Get in touch with Courage for Kids about donations, volunteering, partnerships, or Courage Boxes.">
+  <PageHero eyebrow="Contact" lede="Questions, ideas, or a family you’d like us to know about? We read every message." next="cream">
+    Let’s <em>talk.</em>
+  </PageHero>
+
+  <section class="section--tight">
+    <div class="container contact">
+      <div data-reveal><InquiryForm type="contact" /></div>
+      <aside class="contact__side" data-reveal>
+        <div class="contact__card">
+          <h2>Reach us directly</h2>
+          <ul role="list">
+            <li><Icon name="mail" /><a href={`mailto:${site.email}`}>{site.email}</a></li>
+            <li><Icon name="instagram" /><a href={site.social.instagram} target="_blank" rel="noopener">{site.social.instagramHandle}</a></li>
+            {site.social.facebook && <li><Icon name="facebook" /><a href={site.social.facebook} target="_blank" rel="noopener">Facebook</a></li>}
+            <li><Icon name="pin" /><span>{site.location}</span></li>
+          </ul>
+        </div>
+        <div class="contact__note">
+          <Icon name="heart" size={28} />
+          <p>
+            <strong>Are you a family in treatment?</strong> Reach out any time. Anything you share stays with our
+            leadership team and is never published without your permission.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 2rem; align-items: start; padding-bottom: var(--section); }
+  .contact__side { display: grid; gap: 1.25rem; }
+  .contact__card { padding: 1.75rem; background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow); }
+  .contact__card h2 { font-size: var(--step-1); }
+  .contact__card ul { display: grid; gap: 1rem; margin: 0; padding: 0; list-style: none; }
+  .contact__card li { display: flex; align-items: center; gap: 0.75rem; word-break: break-word; }
+  .contact__card :global(.icon) { flex-shrink: 0; color: var(--navy); }
+  .contact__note { display: flex; gap: 1rem; padding: 1.5rem; background: var(--yellow); border-radius: var(--radius-lg); color: var(--navy-900); }
+  .contact__note :global(.icon) { flex-shrink: 0; }
+  .contact__note p { margin: 0; }
+  @media (max-width: 56rem) { .contact { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,6 @@
+# Copy to .dev.vars for local `npm run pages:dev`. Set real values in the
+# Cloudflare Pages dashboard (Settings → Environment variables) — never commit them.
+RESEND_API_KEY=
+CONTACT_TO=jacob@teamcourageforkids.org
+CONTACT_FROM=Courage for Kids Website <website@teamcourageforkids.org>
+TURNSTILE_SECRET_KEY=

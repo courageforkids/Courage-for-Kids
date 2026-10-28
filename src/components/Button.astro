@@ -1,0 +1,64 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  href: string;
+  variant?: 'primary' | 'navy' | 'ghost' | 'light';
+  size?: 'md' | 'lg';
+  arrow?: boolean;
+  class?: string;
+}
+const { href, variant = 'primary', size = 'md', arrow = false, class: className } = Astro.props;
+const external = /^https?:\/\//.test(href);
+---
+
+<a
+  href={href}
+  class:list={['btn', `btn--${variant}`, `btn--${size}`, className]}
+  {...(external ? { target: '_blank', rel: 'noopener' } : {})}
+>
+  <slot />
+  {arrow && <Icon name="arrow" size={18} class="btn__arrow" />}
+  {external && <span class="visually-hidden"> (opens in a new tab)</span>}
+</a>
+
+<style>
+  .btn {
+    --btn-bg: var(--yellow);
+    --btn-fg: var(--navy-900);
+    --btn-border: var(--yellow);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    min-height: 2.9rem;
+    padding: 0.7rem 1.4rem;
+    border-radius: 999px;
+    border: 2px solid var(--btn-border);
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.1;
+    text-decoration: none;
+    box-shadow: 0 3px 0 0 rgb(11 39 64 / 0.9);
+    transition: transform 0.18s var(--ease), box-shadow 0.18s var(--ease), background-color 0.18s;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 0 0 rgb(11 39 64 / 0.9); }
+  .btn:active { transform: translateY(1px); box-shadow: 0 1px 0 0 rgb(11 39 64 / 0.9); }
+  .btn--lg { min-height: 3.4rem; padding: 0.9rem 1.8rem; font-size: 1.08rem; }
+  .btn--navy { --btn-bg: var(--navy); --btn-fg: var(--white); --btn-border: var(--navy); }
+  .btn--navy:hover { --btn-bg: var(--navy-700); }
+  .btn--ghost {
+    --btn-bg: transparent; --btn-fg: var(--navy-900); --btn-border: var(--navy-900);
+    box-shadow: none;
+  }
+  .btn--ghost:hover { --btn-bg: var(--white); box-shadow: none; }
+  .btn--light {
+    --btn-bg: transparent; --btn-fg: var(--white); --btn-border: rgb(255 255 255 / 0.7);
+    box-shadow: none;
+  }
+  .btn--light:hover { --btn-bg: rgb(255 255 255 / 0.1); box-shadow: none; }
+  .btn :global(.btn__arrow) { transition: transform 0.2s var(--ease); }
+  .btn:hover :global(.btn__arrow) { transform: translateX(3px); }
+</style>

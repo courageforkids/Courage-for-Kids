@@ -1,0 +1,66 @@
+---
+import Button from './Button.astro';
+import LogoMark from './LogoMark.astro';
+import { donateHref } from '../config/site';
+
+interface Props {
+  title?: string;
+  body?: string;
+}
+const {
+  title = 'Together, we help families feel less alone.',
+  body = 'Every gift helps us bring comfort, encouragement, and moments of joy to children battling cancer and the families beside them.',
+} = Astro.props;
+---
+
+<section class="section--tight">
+  <div class="container">
+    <div class="band" data-reveal>
+      <div class="band__mark" aria-hidden="true"><LogoMark size={120} /></div>
+      <div class="band__copy">
+        <h2>{title}</h2>
+        <p>{body}</p>
+      </div>
+      <div class="band__actions">
+        <Button href={donateHref} size="lg" arrow>Donate now</Button>
+        <Button href="/get-involved/" variant="light" size="lg">Other ways to help</Button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .band {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: clamp(1.5rem, 1rem + 2vw, 3rem);
+    padding: clamp(2rem, 1.5rem + 3vw, 3.75rem);
+    background: var(--navy);
+    color: #dce8f2;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .band::after {
+    content: '';
+    position: absolute;
+    right: -6rem;
+    bottom: -9rem;
+    width: 22rem;
+    height: 22rem;
+    border-radius: 50%;
+    border: 2.5rem solid rgb(254 212 56 / 0.12);
+    pointer-events: none;
+  }
+  .band h2 { color: var(--white); font-size: var(--step-3); margin-bottom: 0.5rem; }
+  .band p { margin: 0; max-width: 36rem; }
+  .band__mark { background: var(--cream); border-radius: 50%; padding: 1rem; transform: rotate(-6deg); }
+  .band__actions { display: flex; flex-direction: column; gap: 0.75rem; position: relative; z-index: 1; }
+  @media (max-width: 60rem) {
+    .band { grid-template-columns: 1fr; text-align: center; }
+    .band__mark { justify-self: center; }
+    .band p { margin-inline: auto; }
+    .band__actions { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+  }
+</style>

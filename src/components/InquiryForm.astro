@@ -1,0 +1,226 @@
+---
+/**
+ * One form component for contact, volunteer and partner inquiries.
+ * Posts to the Cloudflare Pages Function at /api/contact. Works without JS
+ * (the function redirects to /thank-you/); with JS it submits inline.
+ */
+import { site } from '../config/site';
+
+interface Props {
+  type: 'contact' | 'volunteer' | 'partner';
+  id?: string;
+  submitLabel?: string;
+}
+const { type, id = `${type}-form`, submitLabel = 'Send message' } = Astro.props;
+
+const topics = ['General question', 'Donations', 'Courage Boxes', 'Volunteering', 'Partnerships & sponsorship', 'Media', 'Something else'];
+const interests = ['Packing Courage Boxes', 'Events & fundraisers', 'Design, photo & social media', 'Writing & outreach', 'Running a school club or drive'];
+const partnerTypes = ['Corporate sponsorship', 'Product donation', 'Hospital or care team', 'School or student group', 'Host a fundraiser', 'Other'];
+---
+
+<form class="inquiry" id={id} method="post" action="/api/contact" data-inquiry-form novalidate>
+  <input type="hidden" name="type" value={type} />
+  <div class="inquiry__hp" aria-hidden="true">
+    <label for={`${id}-website`}>Leave this field empty</label>
+    <input type="text" id={`${id}-website`} name="website" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <div class="inquiry__row">
+    <div class="field">
+      <label for={`${id}-name`}>Your name <span aria-hidden="true">*</span></label>
+      <input id={`${id}-name`} name="name" type="text" autocomplete="name" required maxlength="120" />
+    </div>
+    <div class="field">
+      <label for={`${id}-email`}>Email <span aria-hidden="true">*</span></label>
+      <input id={`${id}-email`} name="email" type="email" autocomplete="email" required maxlength="200" />
+    </div>
+  </div>
+
+  {type === 'contact' && (
+    <div class="field">
+      <label for={`${id}-topic`}>What is this about?</label>
+      <select id={`${id}-topic`} name="topic">
+        {topics.map((t) => <option>{t}</option>)}
+      </select>
+    </div>
+  )}
+
+  {type === 'volunteer' && (
+    <>
+      <div class="inquiry__row">
+        <div class="field">
+          <label for={`${id}-phone`}>Phone <span class="field__opt">(optional)</span></label>
+          <input id={`${id}-phone`} name="phone" type="tel" autocomplete="tel" maxlength="40" />
+        </div>
+        <div class="field">
+          <label for={`${id}-school`}>School or organization <span class="field__opt">(optional)</span></label>
+          <input id={`${id}-school`} name="organization" type="text" maxlength="160" />
+        </div>
+      </div>
+      <fieldset class="field">
+        <legend>I’d love to help with</legend>
+        <div class="checks">
+          {interests.map((i, n) => (
+            <label class="check" for={`${id}-int-${n}`}>
+              <input type="checkbox" id={`${id}-int-${n}`} name="interests" value={i} />
+              <span>{i}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      <p class="field__note">Under 18? Please have a parent or guardian review before you sign up. We will include them in any follow-up.</p>
+    </>
+  )}
+
+  {type === 'partner' && (
+    <div class="inquiry__row">
+      <div class="field">
+        <label for={`${id}-org`}>Organization <span aria-hidden="true">*</span></label>
+        <input id={`${id}-org`} name="organization" type="text" autocomplete="organization" required maxlength="160" />
+      </div>
+      <div class="field">
+        <label for={`${id}-ptype`}>Type of partnership</label>
+        <select id={`${id}-ptype`} name="topic">
+          {partnerTypes.map((t) => <option>{t}</option>)}
+        </select>
+      </div>
+    </div>
+  )}
+
+  <div class="field">
+    <label for={`${id}-message`}>
+      {type === 'volunteer' ? 'Tell us a little about yourself' : type === 'partner' ? 'How would you like to help?' : 'Message'}
+      <span aria-hidden="true">*</span>
+    </label>
+    <textarea id={`${id}-message`} name="message" rows="5" required maxlength="5000"></textarea>
+  </div>
+
+  {site.turnstileSiteKey && (
+    <>
+      <div class="cf-turnstile" data-sitekey={site.turnstileSiteKey} data-theme="light"></div>
+      <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    </>
+  )}
+
+  <div class="inquiry__footer">
+    <button class="inquiry__submit" type="submit">{submitLabel}</button>
+    <p class="field__note">We only use your details to reply. See our <a href="/privacy/">privacy policy</a>.</p>
+  </div>
+  <p class="inquiry__status" role="status" aria-live="polite" data-status></p>
+</form>
+
+<script>
+  import { site } from '../config/site';
+
+  for (const form of document.querySelectorAll<HTMLFormElement>('[data-inquiry-form]')) {
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const label = button.textContent;
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      status.className = 'inquiry__status';
+
+      if (!form.checkValidity()) {
+        const firstInvalid = form.querySelector<HTMLElement>(':invalid');
+        status.textContent = 'Please fill in the highlighted fields.';
+        status.classList.add('is-error');
+        form.classList.add('was-validated');
+        firstInvalid?.focus();
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = 'Sending…';
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) throw new Error(data.error || 'send_failed');
+        form.reset();
+        form.classList.remove('was-validated');
+        status.textContent = 'Thank you! Your message is on its way, and we’ll get back to you soon.';
+        status.classList.add('is-success');
+      } catch {
+        status.innerHTML = `Sorry, that didn’t go through. Please email us at <a href="mailto:${site.email}">${site.email}</a>.`;
+        status.classList.add('is-error');
+      } finally {
+        button.disabled = false;
+        button.textContent = label;
+        (window as any).turnstile?.reset?.();
+      }
+    });
+  }
+</script>
+
+<style>
+  .inquiry {
+    display: grid;
+    gap: 1.1rem;
+    padding: clamp(1.25rem, 1rem + 1.5vw, 2.25rem);
+    background: var(--white);
+    border: 2px solid var(--navy-900);
+    border-radius: var(--radius-lg);
+    box-shadow: 8px 8px 0 0 var(--yellow);
+  }
+  .inquiry__row { display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
+  .field { display: grid; gap: 0.4rem; margin: 0; padding: 0; border: 0; min-width: 0; }
+  .field label, .field legend { font-weight: 700; font-size: 0.95rem; color: var(--navy-900); padding: 0; }
+  .field__opt { font-weight: 500; color: var(--ink-soft); }
+  .field__note { font-size: var(--step--1); color: var(--ink-soft); margin: 0; }
+  .field input, .field select, .field textarea {
+    width: 100%;
+    padding: 0.8rem 0.95rem;
+    font: inherit;
+    color: var(--ink);
+    background: var(--cream);
+    border: 1.5px solid #cfc5b0;
+    border-radius: var(--radius-sm);
+    transition: border-color 0.15s, box-shadow 0.15s, background-color 0.15s;
+  }
+  .field textarea { resize: vertical; min-height: 8rem; }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    outline: none;
+    background: var(--white);
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgb(0 79 129 / 0.2);
+  }
+  .was-validated :is(input, textarea, select):invalid { border-color: #b3261e; background: #fff5f4; }
+  .checks { display: grid; gap: 0.5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); margin-top: 0.2rem; }
+  .field .check {
+    display: flex !important;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 0.8rem;
+    border: 1.5px solid #cfc5b0;
+    border-radius: var(--radius-sm);
+    font-weight: 600 !important;
+    cursor: pointer;
+  }
+  .check:has(input:checked) { border-color: var(--navy); background: var(--sky); }
+  .check input { width: 1.15rem; height: 1.15rem; accent-color: var(--navy); }
+  .inquiry__hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .inquiry__footer { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; }
+  .inquiry__submit {
+    min-height: 3.2rem;
+    padding: 0.8rem 1.8rem;
+    border: 2px solid var(--navy-900);
+    border-radius: 999px;
+    background: var(--navy);
+    color: var(--white);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 3px 0 0 var(--navy-900);
+    transition: transform 0.15s var(--ease), background-color 0.15s;
+  }
+  .inquiry__submit:hover { background: var(--navy-700); transform: translateY(-1px); }
+  .inquiry__submit:disabled { opacity: 0.7; cursor: progress; }
+  .inquiry__status:empty { display: none; }
+  .inquiry__status { margin: 0; padding: 0.85rem 1rem; border-radius: var(--radius-sm); font-weight: 600; }
+  .inquiry__status.is-success { background: #e7f5ea; color: #1d5b2c; }
+  .inquiry__status.is-error { background: #fdecea; color: #8c1d18; }
+</style>

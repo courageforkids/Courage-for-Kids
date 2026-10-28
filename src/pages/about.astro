@@ -1,0 +1,107 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import TeamGrid from '../components/TeamGrid.astro';
+import DonateBand from '../components/DonateBand.astro';
+import Button from '../components/Button.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../config/site';
+import { mission, founderNote } from '../config/content';
+
+const values = [
+  { icon: 'heart' as const, title: 'Compassion first', body: 'Every decision starts with what will genuinely help a child or family feel cared for.' },
+  { icon: 'school' as const, title: 'Youth-powered', body: 'Students lead our programs, proving that age doesn’t limit impact. Caring enough to act does.' },
+  { icon: 'hands' as const, title: 'Tangible support', body: 'We focus on real things families can hold and use, not just good intentions.' },
+  { icon: 'star' as const, title: 'Community together', body: 'Donors, volunteers, schools, businesses, and care teams each play a part.' },
+];
+---
+
+<BaseLayout title="About us" description="Courage for Kids is a youth-led nonprofit in Spartanburg, SC, supporting children battling pediatric cancer and their families.">
+  <PageHero eyebrow="About us" lede={mission.why}>
+    Young people. <em>Real</em> support.
+  </PageHero>
+
+  <section class="section section--white">
+    <div class="container about-story">
+      <div data-reveal>
+        <p class="eyebrow">Our story</p>
+        <h2>Built on compassion, driven by <em class="display">action.</em></h2>
+        <p>
+          Courage for Kids was started by {site.founder}{site.foundedYear ? ` in ${site.foundedYear}` : ''} with a simple
+          belief: no child facing cancer should ever feel alone. What started as an idea grew into a community of
+          students and supporters united by compassion, generosity, and a desire to make a difference.
+        </p>
+        <p>{mission.what}</p>
+        <p>{mission.how}</p>
+      </div>
+      <aside class="about-quote" data-reveal>
+        <Icon name="ribbon" size={40} />
+        <p>“{founderNote.quote}”</p>
+        <span>{founderNote.name}, {founderNote.role}</span>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head section-head--center" data-reveal>
+        <p class="eyebrow">What guides us</p>
+        <h2>Our <em class="display">values</em></h2>
+      </div>
+      <div class="values">
+        {values.map((v) => (
+          <article class="value" data-reveal>
+            <span class="value__icon"><Icon name={v.icon} size={26} /></span>
+            <h3>{v.title}</h3>
+            <p>{v.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--white" id="team">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <div>
+          <p class="eyebrow">Leadership</p>
+          <h2>Meet the <em class="display">team.</em></h2>
+        </div>
+        <p class="lede">A student leadership team runs Courage for Kids, from fundraising to patient interaction.</p>
+      </div>
+      <TeamGrid />
+      <div class="join" data-reveal>
+        <p>Want to help lead the next chapter?</p>
+        <Button href="/get-involved/#volunteer" variant="navy" arrow>Join the team</Button>
+      </div>
+    </div>
+  </section>
+
+  <DonateBand />
+</BaseLayout>
+
+<style>
+  .about-story { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: clamp(2rem, 1rem + 4vw, 5rem); align-items: start; }
+  .about-quote {
+    position: sticky; top: 7rem;
+    padding: 2rem;
+    background: var(--yellow);
+    border: 2px solid var(--navy-900);
+    border-radius: var(--radius-lg);
+    transform: rotate(1.5deg);
+    color: var(--navy-900);
+  }
+  .about-quote p { font-family: var(--font-display); font-style: italic; font-size: var(--step-2); line-height: 1.25; margin: 1rem 0; }
+  .about-quote span { font-weight: 700; font-size: 0.95rem; }
+  .values { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); }
+  .value { padding: 1.75rem; background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); }
+  .value h3 { font-size: var(--step-1); }
+  .value p { margin: 0; color: var(--ink-soft); }
+  .value__icon { display: grid; place-items: center; width: 3rem; height: 3rem; margin-bottom: 1rem; border-radius: 50%; background: var(--sky); color: var(--navy); }
+  .join { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 1rem 1.5rem; margin-top: 3rem; font-family: var(--font-display); font-size: var(--step-1); font-style: italic; }
+  .join p { margin: 0; }
+  @media (max-width: 56rem) {
+    .about-story { grid-template-columns: 1fr; }
+    .about-quote { position: static; }
+  }
+</style>

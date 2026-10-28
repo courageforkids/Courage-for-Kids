@@ -1,0 +1,158 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Button from '../components/Button.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../config/site';
+
+const { zeffyFormUrl, zeffyEmbedUrl, paypalUrl, wishlistUrl } = site.donate;
+const hasOnline = Boolean(zeffyFormUrl || zeffyEmbedUrl || paypalUrl);
+
+const faqs = [
+  {
+    q: 'Is my donation tax-deductible?',
+    a: `Courage for Kids is a 501(c)(3) nonprofit organization${site.ein ? ` (EIN ${site.ein})` : ''}. Donations are tax-deductible to the extent allowed by law, and you’ll receive a receipt by email.`,
+  },
+  {
+    q: 'Is giving online secure?',
+    a: 'Yes. Online gifts are processed by our payment partners on their own secure, encrypted pages. Courage for Kids never sees or stores your card details.',
+  },
+  {
+    q: 'Can my company match my gift?',
+    a: 'Many employers match charitable gifts. Check with your HR team, and contact us if you need any details for the paperwork.',
+  },
+  {
+    q: 'Can I donate items instead?',
+    a: 'Absolutely. New comfort items, activities, and supplies help stock our Courage Boxes. Tell us what you have in mind through our partner form.',
+  },
+];
+---
+
+<BaseLayout title="Donate" description="Support children battling cancer. Donate to Courage for Kids to fund Courage Boxes, Parent Boxes, and family support.">
+  <PageHero eyebrow="Donate" lede="Your gift brings comfort, encouragement, and moments of joy to children battling cancer and the families beside them." next="cream">
+    Give a little <em>courage.</em>
+  </PageHero>
+
+  <section class="section--tight">
+    <div class="container donate">
+      <div class="donate__main" data-reveal>
+        {zeffyEmbedUrl ? (
+          <div class="embed">
+            <iframe
+              title="Donation form for Courage for Kids, powered by Zeffy"
+              src={zeffyEmbedUrl}
+              loading="lazy"
+              allow="payment"
+            ></iframe>
+          </div>
+        ) : (
+          <div class="give-card">
+            <h2>Give online</h2>
+            {hasOnline ? (
+              <>
+                <p>Choose the option that works best for you. Every gift goes toward Courage Boxes, Parent Boxes, and family support.</p>
+                <div class="give-card__actions">
+                  {zeffyFormUrl && <Button href={zeffyFormUrl} size="lg" arrow>Donate with card or bank</Button>}
+                  {paypalUrl && <Button href={paypalUrl} variant="navy" size="lg">Donate with PayPal</Button>}
+                </div>
+                {zeffyFormUrl && (
+                  <p class="fine">Card and bank gifts are processed by Zeffy, which charges our nonprofit no platform or processing fees.</p>
+                )}
+              </>
+            ) : (
+              <>
+                <p>Our online donation form is being connected. In the meantime, we’d love to help you give directly.</p>
+                <div class="give-card__actions">
+                  <Button href={`mailto:${site.email}?subject=I'd like to donate`} size="lg" arrow>Email us to give</Button>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+      </div>
+
+      <aside class="donate__side">
+        <div class="impact" data-reveal>
+          <h2>Where your gift goes</h2>
+          <ul role="list">
+            <li><Icon name="box" /><span><strong>Courage Boxes</strong> Comfort items and activities for children in treatment.</span></li>
+            <li><Icon name="heart" /><span><strong>Parent Boxes</strong> Care for the caregivers beside them.</span></li>
+            <li><Icon name="hands" /><span><strong>Family support</strong> Tangible help so families never feel alone.</span></li>
+          </ul>
+        </div>
+        <div class="other" data-reveal>
+          <h2>Other ways to give</h2>
+          <ul role="list">
+            <li><a href="/get-involved/#products"><Icon name="gift" size={20} /> Donate new items</a></li>
+            {wishlistUrl && <li><a href={wishlistUrl} target="_blank" rel="noopener"><Icon name="box" size={20} /> Shop our wish list</a></li>}
+            <li><a href="/get-involved/#partner"><Icon name="star" size={20} /> Corporate sponsorship</a></li>
+            <li><a href="/get-involved/#fundraise"><Icon name="megaphone" size={20} /> Host a fundraiser</a></li>
+            <li><a href={`mailto:${site.email}?subject=Giving question`}><Icon name="mail" size={20} /> Checks & questions</a></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section--white">
+    <div class="container narrow">
+      <div class="section-head section-head--center" data-reveal>
+        <p class="eyebrow">Questions</p>
+        <h2>Giving <em class="display">FAQ</em></h2>
+      </div>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details data-reveal>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .donate { display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 2rem; align-items: start; }
+  .give-card, .embed {
+    background: var(--white);
+    border: 2px solid var(--navy-900);
+    border-radius: var(--radius-lg);
+    box-shadow: 10px 10px 0 0 var(--yellow);
+  }
+  .give-card { padding: clamp(1.75rem, 1.25rem + 2vw, 3rem); }
+  .give-card h2 { font-size: var(--step-3); }
+  .give-card__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 1.5rem 0; }
+  .fine { font-size: var(--step--1); color: var(--ink-soft); margin: 0; }
+  .embed { overflow: hidden; }
+  .embed iframe { width: 100%; height: 1100px; border: 0; }
+  .donate__side { display: grid; gap: 1.5rem; }
+  .impact, .other { padding: 1.75rem; border-radius: var(--radius-lg); }
+  .impact { background: var(--navy); color: #dce8f2; }
+  .impact h2, .other h2 { font-size: var(--step-1); margin-bottom: 1rem; }
+  .impact h2 { color: var(--white); }
+  .impact ul, .other ul { display: grid; gap: 1rem; margin: 0; padding: 0; list-style: none; }
+  .impact li { display: flex; gap: 0.85rem; }
+  .impact :global(.icon) { flex-shrink: 0; color: var(--yellow); }
+  .impact strong { display: block; color: var(--white); }
+  .other { background: var(--white); box-shadow: var(--shadow); }
+  .other a { display: inline-flex; align-items: center; gap: 0.6rem; font-weight: 600; text-decoration: none; }
+  .other a:hover { text-decoration: underline; }
+  .faq { display: grid; gap: 0.75rem; }
+  .faq details { background: var(--cream); border: 1px solid var(--line); border-radius: var(--radius); padding: 0 1.5rem; }
+  .faq summary {
+    list-style: none;
+    display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    padding: 1.2rem 0;
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: 600;
+    color: var(--navy-900);
+    cursor: pointer;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: '+'; font-family: var(--font-body); font-size: 1.6rem; color: var(--navy); transition: transform 0.2s; }
+  .faq details[open] summary::after { transform: rotate(45deg); }
+  .faq details p { padding-bottom: 1.2rem; margin: 0; color: var(--ink-soft); }
+  @media (max-width: 56rem) { .donate { grid-template-columns: 1fr; } }
+</style>

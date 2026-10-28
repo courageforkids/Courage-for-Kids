@@ -1,0 +1,67 @@
+---
+import Icon from './Icon.astro';
+import type { Program } from '../config/content';
+
+interface Props {
+  program: Program;
+  detailed?: boolean;
+  index?: number;
+}
+const { program, detailed = false, index = 0 } = Astro.props;
+const tones = ['yellow', 'sky', 'cream'] as const;
+const tone = tones[index % tones.length];
+---
+
+<article class:list={['program', `program--${tone}`]} id={program.slug} data-reveal>
+  <div class="program__icon"><Icon name={program.icon} size={30} /></div>
+  <h3>{program.title}</h3>
+  <p>{program.summary}</p>
+  {detailed && <p class="program__body">{program.body}</p>}
+  {program.href && (
+    <a class="program__link" href={program.href}>
+      Learn more<span class="visually-hidden"> about {program.title}</span>
+      <Icon name="arrow" size={18} />
+    </a>
+  )}
+</article>
+
+<style>
+  .program {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(1.5rem, 1.2rem + 1vw, 2.1rem);
+    background: var(--white);
+    border: 2px solid var(--navy-900);
+    border-radius: var(--radius);
+    box-shadow: 6px 6px 0 0 var(--navy-900);
+    transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  }
+  .program:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 0 var(--navy-900); }
+  .program h3 { font-size: var(--step-2); margin-bottom: 0.6rem; }
+  .program p { color: var(--ink-soft); margin-bottom: 0.75rem; }
+  .program__body { color: var(--ink) !important; }
+  .program__icon {
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-bottom: 1.25rem;
+    border-radius: 1rem;
+    color: var(--navy-900);
+    border: 2px solid var(--navy-900);
+  }
+  .program--yellow .program__icon { background: var(--yellow); transform: rotate(-4deg); }
+  .program--sky .program__icon { background: var(--sky); transform: rotate(3deg); }
+  .program--cream .program__icon { background: var(--cream-200); transform: rotate(-2deg); }
+  .program__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: auto;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .program__link::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }
+  .program__link:hover { text-decoration: underline; }
+</style>

@@ -1,0 +1,22 @@
+# Old Wix URLs → new pages. Confirm the real Wix page slugs before launch
+# (Wix dashboard → Pages) and add any that are missing.
+/about-us        /about/          301
+/our-mission     /about/          301
+/mission         /about/          301
+/team            /about/#team     301
+/our-team        /about/#team     301
+/blank           /                301
+/home            /                301
+/donation        /donate/         301
+/donations       /donate/         301
+/give            /donate/         301
+/volunteer       /get-involved/#volunteer  301
+/sponsor         /get-involved/#partner    301
+/sponsors        /get-involved/#partner    301
+/partners        /get-involved/#partner    301
+/contact-us      /contact/        301
+/blog            /stories/        301
+/blog/*          /stories/        301
+/news            /stories/        301
+/courage-box     /courage-boxes/  301
+/courageboxes    /courage-boxes/  301

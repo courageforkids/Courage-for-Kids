@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import ProgramCard from '../components/ProgramCard.astro';
+import DonateBand from '../components/DonateBand.astro';
+import Button from '../components/Button.astro';
+import { programs } from '../config/content';
+---
+
+<BaseLayout title="Programs" description="Courage Boxes, Parent Boxes, family support, hospital partnerships, community events and awareness: how Courage for Kids supports children with cancer.">
+  <PageHero eyebrow="Our programs" lede="Everything we do is designed to help children and their families feel seen, supported, and never alone." next="cream">
+    Comfort, <em>encouragement</em>, and joy.
+  </PageHero>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="visually-hidden">All programs</h2>
+      <div class="grid grid--2">
+        {programs.map((program, i) => <ProgramCard program={program} index={i} detailed />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--white">
+    <div class="container narrow center" data-reveal>
+      <p class="eyebrow">For hospitals & care teams</p>
+      <h2>Let’s get comfort to the kids <em class="display">you care for.</em></h2>
+      <p class="lede">
+        We work with child-life and care teams to make sure what we bring is appropriate and welcome. If you’d like
+        Courage Boxes for your patients, we’d love to talk.
+      </p>
+      <Button href="/get-involved/#partner" variant="navy" size="lg" arrow>Start a conversation</Button>
+    </div>
+  </section>
+
+  <DonateBand title="Help fund the next round of Courage Boxes." />
+</BaseLayout>

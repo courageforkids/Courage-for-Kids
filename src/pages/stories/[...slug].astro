@@ -1,0 +1,53 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import DonateBand from '../../components/DonateBand.astro';
+import Icon from '../../components/Icon.astro';
+
+export async function getStaticPaths() {
+  const stories = await getCollection('stories', ({ data }) => !data.draft);
+  return stories.map((story) => ({ params: { slug: story.id }, props: { story } }));
+}
+
+const { story } = Astro.props;
+const { Content } = await render(story);
+const date = story.data.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+---
+
+<BaseLayout title={story.data.title} description={story.data.summary}>
+  <article class="article">
+    <header class="container article__head">
+      <a class="article__back" href="/stories/"><Icon name="arrow" size={18} class="flip" /> All stories</a>
+      <p class="article__meta"><span class="article__tag">{story.data.tag}</span> <time datetime={story.data.date.toISOString()}>{date}</time></p>
+      <h1>{story.data.title}</h1>
+      <p class="lede">{story.data.summary}</p>
+      <p class="article__author">By {story.data.author}</p>
+    </header>
+    <div class="container article__body prose">
+      <Content />
+    </div>
+  </article>
+  <DonateBand />
+</BaseLayout>
+
+<style>
+  .article { padding-block: clamp(2.5rem, 2rem + 3vw, 5rem) 2rem; }
+  .article__head, .article__body { max-width: 44rem; }
+  .article__head h1 { font-size: var(--step-4); }
+  .article__back { display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 700; text-decoration: none; margin-bottom: 2rem; }
+  .article__back :global(.flip) { transform: scaleX(-1); }
+  .article__meta { display: flex; gap: 0.75rem; align-items: center; font-size: var(--step--1); }
+  .article__tag { padding: 0.2rem 0.7rem; border-radius: 999px; background: var(--yellow); color: var(--navy-900); font-weight: 700; }
+  .article__author { font-weight: 700; color: var(--navy); padding-bottom: 2rem; border-bottom: 1px solid var(--line); }
+  .prose { font-size: 1.12rem; line-height: 1.8; padding-top: 1rem; }
+  .prose :global(h2) { font-size: var(--step-2); margin-top: 2.25rem; }
+  .prose :global(p:first-child::first-letter) {
+    float: left;
+    font-family: var(--font-display);
+    font-size: 4.2em;
+    line-height: 0.8;
+    padding: 0.08em 0.1em 0 0;
+    color: var(--navy);
+  }
+  .prose :global(em) { color: var(--ink-soft); }
+</style>

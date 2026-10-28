@@ -1,0 +1,57 @@
+---
+/** Leadership cards. Uses initials instead of photos until the team approves headshots. */
+import { team } from '../config/content';
+
+const swatches = ['#FED438', '#E3EEF6', '#F4ECDB'];
+const initials = (name: string) => name.split(' ').map((p) => p[0]).join('').slice(0, 2);
+---
+
+<ul class="team" role="list">
+  {team.map((person, i) => (
+    <li class="person" data-reveal>
+      <span class="person__avatar" style={`background:${swatches[i % swatches.length]}`} aria-hidden="true">
+        {initials(person.name)}
+      </span>
+      <span class="person__name">{person.name}</span>
+      <span class="person__role">{person.role}</span>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .team {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 12.5rem), 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .person {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.75rem 1rem 1.5rem;
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .person__avatar {
+    display: grid;
+    place-items: center;
+    width: 5.5rem;
+    height: 5.5rem;
+    margin-bottom: 1rem;
+    border: 2px solid var(--navy-900);
+    border-radius: 42% 58% 55% 45% / 50% 45% 55% 50%;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.9rem;
+    color: var(--navy-900);
+  }
+  .person:nth-child(even) .person__avatar { border-radius: 58% 42% 45% 55% / 45% 55% 45% 55%; }
+  .person__name { font-family: var(--font-display); font-weight: 600; font-size: 1.3rem; color: var(--navy-900); }
+  .person__role { font-size: 0.92rem; color: var(--ink-soft); margin-top: 0.2rem; }
+</style>

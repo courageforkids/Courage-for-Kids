@@ -1,0 +1,139 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import DonateBand from '../components/DonateBand.astro';
+import Button from '../components/Button.astro';
+import Icon from '../components/Icon.astro';
+import { whyComfort, comfortSource } from '../config/content';
+import { site, donateHref } from '../config/site';
+
+const inside = [
+  { icon: 'heart' as const, title: 'Something comforting', body: 'A familiar, cozy comfort for long days and hospital stays.' },
+  { icon: 'sparkle' as const, title: 'Something fun', body: 'Age-appropriate activities, because play is part of coping.' },
+  { icon: 'mail' as const, title: 'Something encouraging', body: 'Words of encouragement and a reminder that a whole community is cheering them on.' },
+];
+
+const steps = [
+  { title: 'Gather', body: 'Donations, sponsorships, and product gifts from our community fund each round of boxes.' },
+  { title: 'Pack', body: 'Our youth-led team puts each box together with care and encouragement.' },
+  { title: 'Deliver', body: 'We coordinate with care teams so boxes reach children and families where they are.' },
+];
+---
+
+<BaseLayout title="Courage Boxes" description="Courage Boxes are thoughtful comfort packages for children facing cancer, packed by student volunteers in Spartanburg, SC.">
+  <PageHero eyebrow="Courage Boxes" lede="Thoughtful comforts for children facing cancer and their families, packed with care by our youth-led team.">
+    Comfort doesn’t cure. <em>But it can care.</em>
+    <Fragment slot="actions">
+      <Button href={donateHref} size="lg" arrow>Sponsor a box</Button>
+      <Button href="#products" variant="ghost" size="lg">Donate items</Button>
+    </Fragment>
+  </PageHero>
+
+  <section class="section section--white">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <div>
+          <p class="eyebrow">What’s inside</p>
+          <h2>Small comforts, <em class="display">big difference.</em></h2>
+        </div>
+        <p class="lede">Every box is a little different, chosen with age, interests, and care-team guidance in mind.</p>
+      </div>
+      <div class="inside">
+        {inside.map((item, i) => (
+          <article class="inside__item" data-reveal style={`--tilt:${[-2, 1.5, -1][i]}deg`}>
+            <span class="inside__icon"><Icon name={item.icon} size={30} /></span>
+            <h3>{item.title}</h3>
+            <p>{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sky">
+    <div class="container why">
+      <div data-reveal>
+        <p class="eyebrow">Why it matters</p>
+        <h2>Treatment changes more than <em class="display">routines.</em></h2>
+        <p class="why__source">Educational context: <a href={comfortSource.url} target="_blank" rel="noopener">{comfortSource.label}</a></p>
+      </div>
+      <ul class="why__list" role="list">
+        {whyComfort.map((item) => (
+          <li data-reveal>
+            <Icon name="check" size={26} />
+            <div><strong>{item.title}</strong> {item.body}</div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head section-head--center" data-reveal>
+        <p class="eyebrow">How it works</p>
+        <h2>From our hands to <em class="display">theirs.</em></h2>
+      </div>
+      <ol class="steps" role="list">
+        {steps.map((step, i) => (
+          <li class="step" data-reveal>
+            <span class="step__num">{i + 1}</span>
+            <h3>{step.title}</h3>
+            <p>{step.body}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--white" id="products">
+    <div class="container narrow center" data-reveal>
+      <p class="eyebrow">Product donations</p>
+      <h2>Have items to <em class="display">give?</em></h2>
+      <p class="lede">
+        Businesses and families regularly help stock our boxes with new comfort items, activities, and supplies. Tell us
+        what you’d like to donate and we’ll let you know what’s most needed right now.
+      </p>
+      <div class="center-actions">
+        <Button href="/get-involved/#partner" variant="navy" size="lg" arrow>Offer a product donation</Button>
+        {site.donate.wishlistUrl && <Button href={site.donate.wishlistUrl} variant="ghost" size="lg">Shop our wish list</Button>}
+      </div>
+      <p class="note">For safety, we can only accept new, unused items.</p>
+    </div>
+  </section>
+
+  <DonateBand title="Sponsor a Courage Box." body="Your gift helps us fill and deliver the next round of boxes to children in treatment." />
+</BaseLayout>
+
+<style>
+  .inside { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
+  .inside__item {
+    padding: 2rem;
+    background: var(--cream);
+    border: 2px solid var(--navy-900);
+    border-radius: var(--radius-lg);
+    transform: rotate(var(--tilt));
+  }
+  .inside__item p { margin: 0; color: var(--ink-soft); }
+  .inside__icon { display: grid; place-items: center; width: 3.6rem; height: 3.6rem; margin-bottom: 1.25rem; border-radius: 1rem; background: var(--navy); color: var(--yellow); }
+  .why { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(2rem, 1rem + 4vw, 5rem); align-items: center; }
+  .why__list { display: grid; gap: 1rem; margin: 0; padding: 0; list-style: none; }
+  .why__list li { display: flex; gap: 1rem; padding: 1.4rem 1.5rem; background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); }
+  .why__list :global(.icon) { flex-shrink: 0; color: var(--navy); background: var(--yellow); border-radius: 50%; padding: 0.25rem; width: 2rem; height: 2rem; }
+  .why__list strong { display: block; font-family: var(--font-display); font-size: var(--step-1); color: var(--navy-900); margin-bottom: 0.2rem; }
+  .why__source { font-size: var(--step--1); color: var(--ink-soft); }
+  .steps { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); margin: 0; padding: 0; list-style: none; counter-reset: none; }
+  .step { position: relative; padding: 2.25rem 1.75rem 1.75rem; background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow); }
+  .step p { margin: 0; color: var(--ink-soft); }
+  .step__num {
+    display: grid; place-items: center;
+    width: 3rem; height: 3rem; margin-bottom: 1rem;
+    border-radius: 50%;
+    background: var(--yellow);
+    border: 2px solid var(--navy-900);
+    font-family: var(--font-display); font-weight: 700; font-size: 1.4rem; color: var(--navy-900);
+  }
+  .center-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-top: 1.5rem; }
+  .note { margin-top: 1.25rem; font-size: var(--step--1); color: var(--ink-soft); }
+  @media (max-width: 56rem) { .why { grid-template-columns: 1fr; } }
+</style>

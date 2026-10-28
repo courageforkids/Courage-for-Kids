@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import LogoMark from '../components/LogoMark.astro';
+---
+
+<BaseLayout title="Thank you" noindex>
+  <section class="section">
+    <div class="container narrow center">
+      <div class="mark"><LogoMark size={96} /></div>
+      <h1>Thank <em class="display">you!</em></h1>
+      <p class="lede">Your message is on its way. Someone from our team will get back to you soon.</p>
+      <div class="actions">
+        <Button href="/">Back home</Button>
+        <Button href="/stories/" variant="ghost">Read our stories</Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .mark { display: inline-block; margin-bottom: 1.5rem; animation: pop 0.6s var(--ease) both; }
+  .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-top: 2rem; }
+  @keyframes pop { from { transform: scale(0.6) rotate(-10deg); opacity: 0; } }
+</style>

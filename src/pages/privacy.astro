@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../config/site';
+---
+
+<BaseLayout title="Privacy policy" description="How Courage for Kids handles your information.">
+  <section class="section">
+    <div class="container narrow prose-page">
+      <p class="eyebrow">Privacy</p>
+      <h1>Privacy policy</h1>
+      <p><em>Last updated October 2026</em></p>
+
+      <h2>What we collect</h2>
+      <p>
+        When you contact us, sign up to volunteer, or submit a partnership inquiry, we collect the details you choose to
+        give us, such as your name, email address, phone number, and message. We use them only to respond to you and to
+        coordinate your involvement with Courage for Kids.
+      </p>
+
+      <h2>Donations</h2>
+      <p>
+        Online donations are processed by third-party payment providers (such as Zeffy or PayPal) on their own secure
+        pages. We receive your name, email, and gift details so we can thank you and send receipts. We never see or store
+        your full card number.
+      </p>
+
+      <h2>What we never do</h2>
+      <ul>
+        <li>We never sell, rent, or trade your personal information.</li>
+        <li>We never publish a child’s or family’s name, photo, or story without written permission from a parent or guardian.</li>
+        <li>We don’t use advertising trackers on this website.</li>
+      </ul>
+
+      <h2>Children</h2>
+      <p>
+        Many of our volunteers are students. If you are under 18, please have a parent or guardian review any form
+        before you submit it. A parent or guardian can ask us to view or delete a minor’s information at any time.
+      </p>
+
+      <h2>Your choices</h2>
+      <p>
+        You can ask us to update or delete your information, or unsubscribe from our emails, by writing to
+        <a href={`mailto:${site.email}`}>{site.email}</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .prose-page h1 { font-size: var(--step-4); }
+  .prose-page h2 { font-size: var(--step-2); margin-top: 2.25rem; }
+  .prose-page li { margin-bottom: 0.5rem; }
+</style>

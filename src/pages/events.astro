@@ -1,0 +1,87 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Button from '../components/Button.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../config/site';
+
+const today = new Date();
+today.setUTCHours(0, 0, 0, 0);
+const upcoming = (await getCollection('events', ({ data }) => !data.draft && (data.endDate ?? data.date) >= today))
+  .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
+
+const fmt = (d: Date) => ({
+  month: d.toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' }),
+  day: d.toLocaleDateString('en-US', { day: 'numeric', timeZone: 'UTC' }),
+  full: d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' }),
+});
+---
+
+<BaseLayout title="Events" description="Upcoming Courage for Kids fundraisers, community events, and volunteer opportunities.">
+  <PageHero eyebrow="Events" lede="Fundraisers, community days, and packing sessions. Come be part of it." next="cream">
+    See you <em>there.</em>
+  </PageHero>
+
+  <section class="section--tight">
+    <div class="container narrow events">
+      {upcoming.length > 0 ? (
+        <ul class="event-list" role="list">
+          {upcoming.map((event) => {
+            const d = fmt(event.data.date);
+            return (
+              <li class="event" data-reveal>
+                <div class="event__date" aria-hidden="true"><span>{d.month}</span><strong>{d.day}</strong></div>
+                <div class="event__body">
+                  <h2>{event.data.title}</h2>
+                  <p class="event__meta">
+                    <span><Icon name="calendar" size={18} /> <time datetime={event.data.date.toISOString()}>{d.full}</time></span>
+                    <span><Icon name="pin" size={18} /> {event.data.location}</span>
+                  </p>
+                  <p>{event.data.summary}</p>
+                  {event.data.registerUrl && <Button href={event.data.registerUrl} variant="navy" arrow>Register</Button>}
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <div class="empty" data-reveal>
+          <Icon name="calendar" size={40} />
+          <h2>New events are on the way.</h2>
+          <p>Follow us on Instagram for the latest dates, or tell us about an event you’d like to host for Courage for Kids.</p>
+          <div class="empty__actions">
+            <Button href={site.social.instagram} arrow>Follow {site.social.instagramHandle}</Button>
+            <Button href="/get-involved/#fundraise" variant="ghost">Host a fundraiser</Button>
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .events { padding-bottom: var(--section); }
+  .event-list { display: grid; gap: 1.25rem; margin: 0; padding: 0; list-style: none; }
+  .event { display: flex; gap: 1.5rem; padding: 1.75rem; background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow); }
+  .event__date {
+    flex-shrink: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 5rem; height: 5.5rem;
+    border-radius: var(--radius);
+    background: var(--yellow);
+    border: 2px solid var(--navy-900);
+    color: var(--navy-900);
+    text-transform: uppercase; font-weight: 700; font-size: 0.85rem;
+  }
+  .event__date strong { font-family: var(--font-display); font-size: 2rem; line-height: 1; }
+  .event h2 { font-size: var(--step-2); margin-bottom: 0.4rem; }
+  .event__meta { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; font-size: 0.95rem; color: var(--ink-soft); }
+  .event__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+  .empty { text-align: center; padding: clamp(2rem, 1.5rem + 3vw, 4rem); background: var(--white); border: 2px dashed #cfc5b0; border-radius: var(--radius-lg); }
+  .empty :global(.icon) { margin: 0 auto 1rem; color: var(--navy); }
+  .empty h2 { font-size: var(--step-3); }
+  .empty p { color: var(--ink-soft); max-width: 32rem; margin-inline: auto; }
+  .empty__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-top: 1.5rem; }
+  @media (max-width: 36rem) { .event { flex-direction: column; } }
+</style>

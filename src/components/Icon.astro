@@ -1,0 +1,51 @@
+---
+/** Hand-drawn-feel line icons (24×24, 1.75 stroke). Decorative unless `label` is set. */
+import type { IconName } from './icon-names';
+
+interface Props {
+  name: IconName;
+  size?: number;
+  label?: string;
+  class?: string;
+}
+const { name, size = 24, label, class: className } = Astro.props;
+
+const paths: Record<IconName, string> = {
+  box: '<path d="M3.5 8.5 12 4l8.5 4.5v8L12 21l-8.5-4.5v-8Z"/><path d="M3.5 8.5 12 13l8.5-4.5M12 13v8"/><path d="m7.8 6.2 8.5 4.6"/>',
+  heart: '<path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.4a4.3 4.3 0 0 1 7.5 2.4C19.5 15.4 12 20 12 20Z"/>',
+  hands: '<path d="M2.5 14.5 6 11c1-1 2.3-1.2 3.6-.6l3.1 1.4c.8.4 1 1.4.4 2-.4.4-1 .6-1.6.4L9 13.4"/><path d="M2.5 19.5h4.2l5.6 1.2c.9.2 1.8 0 2.5-.5l6.2-4.6c.8-.6.8-1.8 0-2.4-.6-.4-1.4-.4-2 0l-3.8 2.6"/><path d="M14 8.6c-1.6-1-3-2.4-3-4 0-1.1.9-2 2-2 .8 0 1.4.5 1.7 1.1.3-.6.9-1.1 1.7-1.1 1.1 0 2 .9 2 2 0 1.6-1.4 3-3 4l-.7.4-.7-.4Z"/>',
+  hospital: '<path d="M4 21V7.5L12 3l8 4.5V21"/><path d="M2.5 21h19M10 21v-4h4v4"/><path d="M12 7.5v5M9.5 10h5"/>',
+  star: '<path d="m12 3.2 2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.6l-5.2 2.7 1-5.8-4.3-4.1 5.9-.8L12 3.2Z"/>',
+  megaphone: '<path d="M3.5 10v4c0 .6.4 1 1 1h2.5l7.5 4.5v-15L7 9H4.5c-.6 0-1 .4-1 1Z"/><path d="M7 15l1.4 5h2.4l-1-4.4M17.5 9.2a4 4 0 0 1 0 5.6M19.8 7a7 7 0 0 1 0 10"/>',
+  ribbon: '<path d="M12 12.5c-2.6-3-4-5.4-4-7.2a4 4 0 0 1 8 0c0 1.8-1.4 4.2-4 7.2Z"/><path d="M12 12.5 7.2 21l-1.6-2.4-2.8.4L9.6 9.7M12 12.5l4.8 8.5 1.6-2.4 2.8.4-6.8-9.3"/>',
+  mail: '<rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="m3.8 7 8.2 6 8.2-6"/>',
+  instagram: '<rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6" fill="currentColor"/>',
+  facebook: '<path d="M14.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.6-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H9v3h2.5V21"/>',
+  arrow: '<path d="M4.5 12h15M13.5 6l6 6-6 6"/>',
+  check: '<path d="m4.5 12.5 4.5 4.5 10.5-10.5"/>',
+  calendar: '<rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+  pin: '<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11Z"/><circle cx="12" cy="10" r="2.4"/>',
+  menu: '<path d="M4 7h16M4 12h16M4 17h10"/>',
+  close: '<path d="M6 6l12 12M18 6 6 18"/>',
+  gift: '<rect x="3.5" y="8.5" width="17" height="4" rx="1"/><path d="M5 12.5V20h14v-7.5M12 8.5V20"/><path d="M12 8.5C10 8.5 7.5 7.8 7.5 6a1.8 1.8 0 0 1 3.2-1.1L12 8.5Zm0 0c2 0 4.5-.7 4.5-2.5a1.8 1.8 0 0 0-3.2-1.1L12 8.5Z"/>',
+  school: '<path d="M2.5 9 12 4.5 21.5 9 12 13.5 2.5 9Z"/><path d="M6.5 11v5c1.6 1.6 3.4 2.4 5.5 2.4s3.9-.8 5.5-2.4v-5M21.5 9v5.5"/>',
+  sparkle: '<path d="M12 3c.6 4.5 2.5 6.4 7 7-4.5.6-6.4 2.5-7 7-.6-4.5-2.5-6.4-7-7 4.5-.6 6.4-2.5 7-7Z"/><path d="M19 15.5c.2 1.6.9 2.3 2.5 2.5-1.6.2-2.3.9-2.5 2.5-.2-1.6-.9-2.3-2.5-2.5 1.6-.2 2.3-.9 2.5-2.5Z"/>',
+};
+---
+
+<svg
+  class:list={['icon', className]}
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.75"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+  focusable="false"
+  set:html={paths[name]}
+/>
