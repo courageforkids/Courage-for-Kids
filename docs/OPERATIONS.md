@@ -44,3 +44,9 @@ The tracker workbook is kept **outside** this repository because it contains par
 - No patient names, diagnoses, room numbers or photos in the tracker, Canva, or the website.
 - Product photos are fine; photos of children only with written parent/guardian permission (see [CONTENT-GUIDE.md](CONTENT-GUIDE.md)).
 - Donor names are published only with the donor's permission.
+
+## CFK Hub (CRM) and the morning brief
+
+- **CFK Hub** (`crm/index.html`, published as a private claude.ai page) is the live CRM: Today dashboard, partner pipeline board, tasks, donations and events, stored in the page's shared database. Share it from the page's Share menu; give directors **Contributor** access so they can edit.
+- **CFK Morning Brief** is a scheduled task that runs at 6:44 AM Eastern every day. It reads the Hub, writes "This morning's brief" at the top of the Today view, and sends Jacob a push notification with overdue, due-today, done and follow-up items. It reads only the Hub; it never sends email or edits records.
+- The spreadsheet tracker remains a backup/export; the Hub is the source of truth going forward.

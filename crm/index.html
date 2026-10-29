@@ -1,0 +1,577 @@
+<title>CFK Hub</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: sticky brand bar + tab strip; each view is a single column of work-first panels (summary before detail). */
+:root {
+  --bg: #fbf6ec;          /* CFK cream paper */
+  --surface: #ffffff;
+  --surface-2: #f4ecdb;
+  --ink: #13263a;
+  --ink-soft: #55667a;
+  --line: #e4dccb;
+  --navy: #004f81;        /* CFK navy: primary */
+  --navy-ink: #0b2740;
+  --yellow: #fed438;      /* gold ribbon: highlights only */
+  --on-yellow: #0b2740;
+  --danger: #b3261e;
+  --danger-bg: #fdecea;
+  --warn: #8a5a00;
+  --warn-bg: #fff4d6;
+  --ok: #1d6b38;
+  --ok-bg: #e5f4ea;
+  --focus: #1b74b5;
+  --display: "Fraunces", Georgia, "Times New Roman", serif;
+  --body: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0c1a28; --surface: #12263a; --surface-2: #183049; --ink: #eaf1f7; --ink-soft: #a9bccd;
+    --line: #24425f; --navy: #7cc0ef; --navy-ink: #eaf1f7; --yellow: #fed438; --on-yellow: #0b2740;
+    --danger: #ff9b92; --danger-bg: #3a1a1a; --warn: #ffd27a; --warn-bg: #3a2e12; --ok: #8fe0a8; --ok-bg: #133524;
+    --focus: #8ccaf5; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0c1a28; --surface: #12263a; --surface-2: #183049; --ink: #eaf1f7; --ink-soft: #a9bccd;
+  --line: #24425f; --navy: #7cc0ef; --navy-ink: #eaf1f7; --yellow: #fed438; --on-yellow: #0b2740;
+  --danger: #ff9b92; --danger-bg: #3a1a1a; --warn: #ffd27a; --warn-bg: #3a2e12; --ok: #8fe0a8; --ok-bg: #133524;
+  --focus: #8ccaf5; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5; margin: 0; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* Top bar */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line); }
+.bar__row { display: flex; align-items: center; gap: 12px; padding-block: 10px; }
+.brand { display: flex; align-items: center; gap: 10px; margin-right: auto; min-width: 0; }
+.brand h1 { font-family: var(--display); font-size: 22px; margin: 0; color: var(--navy-ink); letter-spacing: -0.01em; }
+.brand h1 em { font-style: italic; color: var(--navy); font-weight: 500; }
+.brand small { display: block; color: var(--ink-soft); font-size: 12px; }
+.tabs { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+.tabs a { flex: 0 0 auto; padding: 7px 14px; border-radius: 999px; color: var(--ink-soft); font-weight: 700; font-size: 14px; text-decoration: none; }
+.tabs a[aria-current="page"] { background: var(--navy); color: var(--surface); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tabs a[aria-current="page"] { color: #0b2740; } }
+:root[data-theme="dark"] .tabs a[aria-current="page"] { color: #0b2740; }
+.tabs .count { display: inline-block; min-width: 20px; margin-left: 6px; padding: 0 6px; border-radius: 999px; background: var(--danger); color: #fff; font-size: 12px; text-align: center; }
+
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--navy-ink); background: var(--yellow); color: var(--on-yellow); font-weight: 800; cursor: pointer; white-space: nowrap; }
+.btn--ghost { background: transparent; color: var(--ink); border-color: var(--line); font-weight: 700; }
+.btn--danger { background: var(--danger-bg); color: var(--danger); border-color: var(--danger); }
+.btn:disabled { opacity: .55; cursor: default; }
+
+main { padding-block: 20px 60px; }
+.view[hidden] { display: none; }
+h2 { font-family: var(--display); font-weight: 600; font-size: 26px; margin: 0 0 4px; color: var(--navy-ink); text-wrap: balance; }
+.sub { color: var(--ink-soft); margin: 0 0 18px; }
+h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-soft); margin: 0 0 10px; font-weight: 800; }
+
+/* Today */
+.brief { background: var(--navy); color: #eef5fb; border-radius: var(--r); padding: 18px 20px; margin-bottom: 18px; display: grid; gap: 6px; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .brief { background: #183049; } }
+:root[data-theme="dark"] .brief { background: #183049; }
+.brief b { color: var(--yellow); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+.brief p { margin: 0; white-space: pre-line; max-width: 75ch; }
+.brief small { opacity: .8; }
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 22px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 16px; text-decoration: none; color: inherit; display: grid; gap: 2px; }
+.tile strong { font-family: var(--display); font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; color: var(--navy-ink); }
+.tile span { color: var(--ink-soft); font-weight: 600; font-size: 13px; }
+.tile--alert { border-color: var(--danger); background: var(--danger-bg); }
+.tile--alert strong { color: var(--danger); }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; min-width: 0; }
+.list { list-style: none; margin: 0; padding: 0; display: grid; }
+.row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: start; padding: 10px 0; border-top: 1px solid var(--line); }
+.row:first-child { border-top: 0; }
+.row__main { min-width: 0; cursor: pointer; }
+.row__title { font-weight: 700; overflow-wrap: anywhere; }
+.row__meta { color: var(--ink-soft); font-size: 13px; overflow-wrap: anywhere; }
+.empty { color: var(--ink-soft); padding: 8px 0; margin: 0; }
+.chk { width: 22px; height: 22px; margin-top: 1px; accent-color: var(--navy); cursor: pointer; }
+.dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 7px; background: var(--line); }
+
+/* Chips */
+.chip { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; background: var(--surface-2); color: var(--ink); white-space: nowrap; }
+.chip--over { background: var(--danger-bg); color: var(--danger); }
+.chip--soon { background: var(--warn-bg); color: var(--warn); }
+.chip--ok { background: var(--ok-bg); color: var(--ok); }
+.chip--high { background: var(--yellow); color: var(--on-yellow); }
+
+/* Toolbar */
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px; }
+.toolbar input, .toolbar select { padding: 8px 12px; border: 1.5px solid var(--line); border-radius: 999px; background: var(--surface); min-width: 0; }
+.toolbar input { flex: 1 1 220px; }
+
+/* Board */
+.board-scroll { overflow-x: auto; padding-bottom: 8px; }
+.board { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(230px, 1fr); gap: 12px; min-width: min-content; }
+.col { background: var(--surface-2); border-radius: var(--r); padding: 10px; display: grid; gap: 8px; align-content: start; }
+.col h4 { margin: 2px 4px 4px; font-size: 13px; display: flex; justify-content: space-between; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: grid; gap: 4px; cursor: pointer; text-align: left; width: 100%; }
+.card:hover { border-color: var(--navy); }
+.card b { overflow-wrap: anywhere; }
+.card small { color: var(--ink-soft); overflow-wrap: anywhere; }
+
+/* Table */
+.table-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); }
+td.num { text-align: right; }
+tbody tr { cursor: pointer; }
+tbody tr:hover { background: var(--surface-2); }
+.totals { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
+
+/* Dialog */
+dialog { border: 0; border-radius: 18px; padding: 0; width: min(560px, calc(100vw - 32px)); background: var(--surface); color: var(--ink); }
+dialog::backdrop { background: rgb(11 39 64 / .45); }
+.dlg { display: grid; gap: 12px; padding: 20px; max-height: min(86vh, 760px); overflow-y: auto; }
+.dlg h2 { font-size: 22px; }
+.fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.field { display: grid; gap: 4px; min-width: 0; }
+.field--wide { grid-column: 1 / -1; }
+.field label { font-weight: 700; font-size: 13px; }
+.field input, .field select, .field textarea { padding: 9px 11px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--bg); min-width: 0; width: 100%; }
+.field textarea { min-height: 80px; resize: vertical; }
+.dlg__actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; align-items: center; }
+.dlg__actions .spacer { margin-right: auto; }
+.status { min-height: 1.2em; font-size: 13px; color: var(--ink-soft); margin: 0; }
+.status.err { color: var(--danger); }
+
+.notice { background: var(--warn-bg); color: var(--warn); border-radius: var(--r); padding: 10px 14px; margin-bottom: 16px; font-weight: 600; }
+.toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--navy-ink); color: var(--bg); padding: 10px 16px; border-radius: 999px; font-weight: 700; z-index: 20; }
+
+@media (max-width: 820px) {
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid2 { grid-template-columns: minmax(0, 1fr); }
+  .fields { grid-template-columns: minmax(0, 1fr); }
+  .brand small { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header class="bar">
+  <div class="wrap">
+    <div class="bar__row">
+      <div class="brand">
+        <svg width="34" height="34" viewBox="0 0 64 64" aria-hidden="true"><path d="M17 31C9 36 4 44 2.5 54c6-4.5 13-7 21-7.5L17 31Z" fill="#FED438"/><path d="M32 57C14 43 5.5 33.5 5.5 22.6 5.5 14.6 11.8 8.4 19.6 8.4c5.2 0 9.8 2.8 12.4 7.1 2.6-4.3 7.2-7.1 12.4-7.1 7.8 0 14.1 6.2 14.1 14.2C58.5 33.5 50 43 32 57Z" fill="#004F81"/><circle cx="32" cy="23.5" r="5.6" fill="#FBF6EC"/><path d="M21.5 27.5c3 4.2 6.3 6.6 10.5 6.6s7.5-2.4 10.5-6.6c.9 1.6.8 3.4-.4 5L36.5 39v5.8L32 49.5l-4.5-4.7V39l-5.6-6.5c-1.2-1.6-1.3-3.4-.4-5Z" fill="#FBF6EC"/></svg>
+        <div><h1>CFK <em>Hub</em></h1><small>Courage for Kids · partners, tasks, gifts &amp; events</small></div>
+      </div>
+      <button class="btn" id="newBtn" type="button">+ New</button>
+    </div>
+    <nav class="tabs" aria-label="Sections">
+      <a href="#today" data-view="today">Today<span class="count" id="tabOverdue" hidden></span></a>
+      <a href="#partners" data-view="partners">Partners</a>
+      <a href="#tasks" data-view="tasks">Tasks</a>
+      <a href="#donations" data-view="donations">Donations</a>
+      <a href="#events" data-view="events">Events</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <p class="notice" id="notice" hidden></p>
+
+  <!-- TODAY -->
+  <section class="view" id="view-today" aria-labelledby="todayTitle">
+    <h2 id="todayTitle">Good morning</h2>
+    <p class="sub" id="todayDate"></p>
+    <div class="brief" id="brief" hidden><b>This morning's brief</b><p id="briefText"></p><small id="briefAt"></small></div>
+    <div class="tiles">
+      <a class="tile" href="#tasks" id="tOverdue"><strong>–</strong><span>Overdue tasks</span></a>
+      <a class="tile" href="#tasks" id="tWeek"><strong>–</strong><span>Due in the next 7 days</span></a>
+      <a class="tile" href="#partners" id="tFollow"><strong>–</strong><span>Partners to follow up</span></a>
+      <a class="tile" href="#tasks" id="tDone"><strong>–</strong><span>Done in the last 7 days</span></a>
+    </div>
+    <div class="grid2">
+      <div class="panel"><h3>Overdue</h3><ul class="list" id="listOverdue"></ul></div>
+      <div class="panel"><h3>Due this week</h3><ul class="list" id="listWeek"></ul></div>
+      <div class="panel"><h3>Partner follow-ups</h3><ul class="list" id="listFollow"></ul></div>
+      <div class="panel"><h3>Recently done</h3><ul class="list" id="listDone"></ul></div>
+      <div class="panel"><h3>Coming up</h3><ul class="list" id="listEvents"></ul></div>
+      <div class="panel"><h3>Gifts still to thank</h3><ul class="list" id="listThanks"></ul></div>
+    </div>
+  </section>
+
+  <!-- PARTNERS -->
+  <section class="view" id="view-partners" hidden aria-labelledby="partnersTitle">
+    <h2 id="partnersTitle">Partners</h2>
+    <p class="sub">Sponsors, product donors, hospitals, grants and community groups, by where each one stands.</p>
+    <div class="toolbar">
+      <input id="pSearch" type="search" placeholder="Search partners" aria-label="Search partners">
+      <select id="pType" aria-label="Filter by type"><option value="">All types</option></select>
+      <select id="pOwner" aria-label="Filter by owner"><option value="">Everyone</option></select>
+    </div>
+    <div class="board-scroll"><div class="board" id="board"></div></div>
+  </section>
+
+  <!-- TASKS -->
+  <section class="view" id="view-tasks" hidden aria-labelledby="tasksTitle">
+    <h2 id="tasksTitle">Tasks</h2>
+    <p class="sub">One owner and one due date per task. Tick the box when it's done.</p>
+    <div class="toolbar">
+      <input id="tSearch" type="search" placeholder="Search tasks" aria-label="Search tasks">
+      <select id="tOwner" aria-label="Filter by owner"><option value="">Everyone</option></select>
+      <select id="tShow" aria-label="Show"><option value="open">Open</option><option value="done">Done</option><option value="all">All</option></select>
+    </div>
+    <div class="panel"><ul class="list" id="taskList"></ul></div>
+  </section>
+
+  <!-- DONATIONS -->
+  <section class="view" id="view-donations" hidden aria-labelledby="donTitle">
+    <h2 id="donTitle">Donations</h2>
+    <p class="sub">Log every gift the day it arrives, then send the receipt and thank-you.</p>
+    <div class="totals" id="donTotals"></div>
+    <div class="panel table-scroll">
+      <table>
+        <thead><tr><th>Date</th><th>Donor</th><th>Gift</th><th class="num">Value</th><th>Receipt</th><th>Thanked</th></tr></thead>
+        <tbody id="donRows"></tbody>
+      </table>
+      <p class="empty" id="donEmpty" hidden>No gifts logged yet. Use “+ New” to log one.</p>
+    </div>
+  </section>
+
+  <!-- EVENTS -->
+  <section class="view" id="view-events" hidden aria-labelledby="evTitle">
+    <h2 id="evTitle">Events</h2>
+    <p class="sub">Deliveries, fundraisers and community days.</p>
+    <div class="panel"><ul class="list" id="eventList"></ul></div>
+  </section>
+</main>
+
+<dialog id="dlg" aria-labelledby="dlgTitle">
+  <form class="dlg" id="dlgForm" method="dialog" novalidate>
+    <h2 id="dlgTitle">Edit</h2>
+    <div class="field" id="kindField">
+      <label for="kind">What are you adding?</label>
+      <select id="kind"><option value="tasks">Task</option><option value="contacts">Partner</option><option value="donations">Donation</option><option value="events">Event</option></select>
+    </div>
+    <div class="fields" id="fields"></div>
+    <p class="status" id="dlgStatus" role="status"></p>
+    <div class="dlg__actions">
+      <button class="btn btn--danger spacer" type="button" id="delBtn" hidden>Delete</button>
+      <button class="btn btn--ghost" type="button" id="cancelBtn">Cancel</button>
+      <button class="btn" type="submit" id="saveBtn">Save</button>
+    </div>
+  </form>
+</dialog>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script>
+(function () {
+  const TEAM = ["Jacob", "Julia", "Isaac", "Reese", "David", "Arleigh", "Owen"];
+  const STAGES = ["Prospect", "Asked", "Pending", "Waiting", "Committed", "Received", "Thanked", "Declined"];
+  const FOLLOW_STAGES = ["Asked", "Pending", "Waiting", "Committed"];
+  const TYPES = ["Product", "Corporate", "Hospital", "Grant", "Community", "Individual", "Volunteer", "Media"];
+
+  // Field schemas for the edit dialog, per collection.
+  const SCHEMA = {
+    tasks: { label: "Task", fields: [
+      { k: "title", l: "Task", t: "text", req: true, wide: true },
+      { k: "owner", l: "Owner", t: "select", o: TEAM },
+      { k: "due", l: "Due", t: "date" },
+      { k: "priority", l: "Priority", t: "select", o: ["High", "Medium", "Low"] },
+      { k: "status", l: "Status", t: "select", o: ["Open", "In progress", "Waiting", "Done"] },
+      { k: "area", l: "Area", t: "text" },
+      { k: "contactId", l: "Partner", t: "partner" },
+      { k: "notes", l: "Notes", t: "textarea", wide: true } ] },
+    contacts: { label: "Partner", fields: [
+      { k: "name", l: "Organization or person", t: "text", req: true, wide: true },
+      { k: "type", l: "Type", t: "select", o: TYPES },
+      { k: "stage", l: "Stage", t: "select", o: STAGES },
+      { k: "owner", l: "Owner", t: "select", o: TEAM },
+      { k: "email", l: "Email", t: "email" },
+      { k: "ask", l: "What we asked / they offered", t: "text", wide: true },
+      { k: "lastContact", l: "Last contact", t: "date" },
+      { k: "nextDate", l: "Follow up by", t: "date" },
+      { k: "nextStep", l: "Next step", t: "text", wide: true },
+      { k: "notes", l: "Notes", t: "textarea", wide: true } ] },
+    donations: { label: "Donation", fields: [
+      { k: "donor", l: "Donor", t: "text", req: true },
+      { k: "date", l: "Date received", t: "date" },
+      { k: "giftType", l: "Gift type", t: "select", o: ["Cash", "In-kind"] },
+      { k: "value", l: "Value ($)", t: "number" },
+      { k: "description", l: "Description", t: "text", wide: true },
+      { k: "method", l: "Method", t: "select", o: ["Zeffy", "PayPal", "Check", "Cash", "Shipped", "Gift card", "Other"] },
+      { k: "receiptSent", l: "Receipt sent", t: "select", o: ["No", "Yes"] },
+      { k: "thanked", l: "Thank-you sent", t: "select", o: ["No", "Yes"] },
+      { k: "notes", l: "Notes", t: "textarea", wide: true } ] },
+    events: { label: "Event", fields: [
+      { k: "title", l: "Event", t: "text", req: true, wide: true },
+      { k: "date", l: "Date", t: "date" },
+      { k: "status", l: "Status", t: "select", o: ["Idea", "Applying", "Planning", "Confirmed", "Done", "Cancelled"] },
+      { k: "owner", l: "Owner", t: "select", o: TEAM },
+      { k: "location", l: "Location", t: "text" },
+      { k: "notes", l: "Notes", t: "textarea", wide: true } ] },
+  };
+
+  const state = { tasks: [], contacts: [], donations: [], events: [], brief: null, canWrite: true };
+  let db = null;
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+
+  // ---------- dates (local calendar) ----------
+  const iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  const addDays = (n) => { const d = new Date(); d.setDate(d.getDate() + n); return iso(d); };
+  const today = () => iso(new Date());
+  const fmt = (s) => { if (!s) return ""; const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d).toLocaleDateString("en-US", { month: "short", day: "numeric" }); };
+  const dueChip = (s, done) => {
+    if (!s) return "";
+    if (done) return `<span class="chip">${esc(fmt(s))}</span>`;
+    if (s < today()) return `<span class="chip chip--over">Overdue · ${esc(fmt(s))}</span>`;
+    if (s === today()) return `<span class="chip chip--soon">Today</span>`;
+    if (s <= addDays(7)) return `<span class="chip chip--soon">${esc(fmt(s))}</span>`;
+    return `<span class="chip">${esc(fmt(s))}</span>`;
+  };
+  const money = (n) => "$" + Math.round(Number(n) || 0).toLocaleString("en-US");
+
+  // ---------- derived sets ----------
+  const isOpen = (t) => t.status !== "Done";
+  const overdue = () => state.tasks.filter((t) => isOpen(t) && t.due && t.due < today()).sort(byDue);
+  const dueWeek = () => state.tasks.filter((t) => isOpen(t) && t.due && t.due >= today() && t.due <= addDays(7)).sort(byDue);
+  const doneRecent = () => state.tasks.filter((t) => t.status === "Done" && (t.doneAt || "") >= addDays(-7)).sort((a, b) => (b.doneAt || "").localeCompare(a.doneAt || ""));
+  const followUps = () => state.contacts.filter((c) => FOLLOW_STAGES.includes(c.stage) &&
+      ((c.nextDate && c.nextDate <= addDays(3)) || (!c.nextDate && c.lastContact && c.lastContact <= addDays(-14))))
+    .sort((a, b) => (a.nextDate || a.lastContact || "").localeCompare(b.nextDate || b.lastContact || ""));
+  function byDue(a, b) { return (a.due || "9999").localeCompare(b.due || "9999"); }
+  const contactName = (id) => state.contacts.find((c) => c.id === id)?.name || "";
+
+  // ---------- rendering ----------
+  function taskRow(t) {
+    const done = t.status === "Done";
+    const meta = [t.owner, t.area, t.contactId && contactName(t.contactId)].filter(Boolean).map(esc).join(" · ");
+    return `<li class="row" data-id="${esc(t.id)}" data-kind="tasks">
+      <input class="chk" type="checkbox" ${done ? "checked" : ""} ${state.canWrite ? "" : "disabled"} aria-label="Mark “${esc(t.title)}” ${done ? "not done" : "done"}" data-toggle="${esc(t.id)}">
+      <div class="row__main" data-open><div class="row__title" ${done ? 'style="text-decoration:line-through;opacity:.7"' : ""}>${esc(t.title)}</div><div class="row__meta">${meta}</div></div>
+      <div>${t.priority === "High" && !done ? '<span class="chip chip--high">High</span> ' : ""}${dueChip(t.due, done)}</div></li>`;
+  }
+  function contactRow(c) {
+    const when = c.nextDate ? dueChip(c.nextDate) : `<span class="chip">Last ${esc(fmt(c.lastContact))}</span>`;
+    return `<li class="row" data-id="${esc(c.id)}" data-kind="contacts"><span class="dot" aria-hidden="true"></span>
+      <div class="row__main" data-open><div class="row__title">${esc(c.name)}</div><div class="row__meta">${esc(c.nextStep || c.ask || "")}${c.owner ? " · " + esc(c.owner) : ""}</div></div>
+      <div>${when}</div></li>`;
+  }
+  const fill = (el, items, rowFn, emptyText) => { el.innerHTML = items.length ? items.map(rowFn).join("") : `<li class="empty">${esc(emptyText)}</li>`; };
+
+  function renderToday() {
+    const d = new Date();
+    const hour = d.getHours();
+    $("todayTitle").textContent = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+    $("todayDate").textContent = d.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+    const o = overdue(), w = dueWeek(), f = followUps(), dn = doneRecent();
+    setTile("tOverdue", o.length, o.length > 0); setTile("tWeek", w.length); setTile("tFollow", f.length); setTile("tDone", dn.length);
+    fill($("listOverdue"), o, taskRow, "Nothing overdue. Nice work.");
+    fill($("listWeek"), w, taskRow, "Nothing due in the next 7 days.");
+    fill($("listFollow"), f, contactRow, "No partners waiting on a follow-up.");
+    fill($("listDone"), dn, taskRow, "Tick tasks off and they'll show up here.");
+    const ev = state.events.filter((e) => e.status !== "Done" && e.status !== "Cancelled").sort((a, b) => (a.date || "9999").localeCompare(b.date || "9999")).slice(0, 6);
+    fill($("listEvents"), ev, eventRow, "No upcoming events yet.");
+    const th = state.donations.filter((g) => g.thanked !== "Yes");
+    fill($("listThanks"), th, (g) => `<li class="row" data-id="${esc(g.id)}" data-kind="donations"><span class="dot" aria-hidden="true"></span>
+      <div class="row__main" data-open><div class="row__title">${esc(g.donor)}</div><div class="row__meta">${esc(g.description || g.giftType || "")}</div></div><div><span class="chip chip--soon">Thank-you due</span></div></li>`, "Every gift has been thanked.");
+    const b = state.brief;
+    $("brief").hidden = !b;
+    if (b) { $("briefText").textContent = b.text || ""; $("briefAt").textContent = b.generatedAt ? "Prepared " + new Date(b.generatedAt).toLocaleString("en-US", { weekday: "short", hour: "numeric", minute: "2-digit" }) : ""; }
+    const tab = $("tabOverdue"); tab.hidden = !o.length; tab.textContent = o.length;
+  }
+  function setTile(id, n, alert) { const el = $(id); el.querySelector("strong").textContent = n; el.classList.toggle("tile--alert", !!alert); }
+
+  function renderPartners() {
+    const q = $("pSearch").value.trim().toLowerCase(), ty = $("pType").value, ow = $("pOwner").value;
+    const list = state.contacts.filter((c) => (!ty || c.type === ty) && (!ow || c.owner === ow) &&
+      (!q || [c.name, c.ask, c.nextStep, c.notes].join(" ").toLowerCase().includes(q)));
+    $("board").innerHTML = STAGES.map((s) => {
+      const cs = list.filter((c) => (c.stage || "Prospect") === s);
+      return `<div class="col" aria-label="${esc(s)}"><h4><span>${esc(s)}</span><span class="chip">${cs.length}</span></h4>
+        ${cs.map((c) => `<button class="card" type="button" data-id="${esc(c.id)}" data-kind="contacts">
+          <b>${esc(c.name)}</b><small>${esc(c.ask || "")}</small>
+          <small>${esc([c.type, c.owner].filter(Boolean).join(" · "))}</small>
+          ${c.nextDate ? `<span>${dueChip(c.nextDate)}</span>` : ""}</button>`).join("")}</div>`;
+    }).join("");
+  }
+  function renderTasks() {
+    const q = $("tSearch").value.trim().toLowerCase(), ow = $("tOwner").value, show = $("tShow").value;
+    const list = state.tasks.filter((t) => (!ow || t.owner === ow) && (show === "all" || (show === "open" ? isOpen(t) : !isOpen(t))) &&
+      (!q || [t.title, t.area, t.notes].join(" ").toLowerCase().includes(q))).sort(show === "done" ? (a, b) => (b.doneAt || "").localeCompare(a.doneAt || "") : byDue);
+    fill($("taskList"), list, taskRow, show === "done" ? "No finished tasks yet." : "No open tasks. Add one with “+ New”.");
+  }
+  function renderDonations() {
+    const g = [...state.donations].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+    $("donRows").innerHTML = g.map((d) => `<tr data-id="${esc(d.id)}" data-kind="donations"><td>${esc(fmt(d.date))}</td><td>${esc(d.donor)}</td>
+      <td>${esc(d.description || "")} <span class="chip">${esc(d.giftType || "")}</span></td><td class="num">${d.value ? esc(money(d.value)) : "–"}</td>
+      <td>${d.receiptSent === "Yes" ? '<span class="chip chip--ok">Sent</span>' : '<span class="chip chip--soon">To send</span>'}</td>
+      <td>${d.thanked === "Yes" ? '<span class="chip chip--ok">Thanked</span>' : '<span class="chip chip--soon">To thank</span>'}</td></tr>`).join("");
+    $("donEmpty").hidden = g.length > 0;
+    const cash = g.filter((d) => d.giftType === "Cash").reduce((s, d) => s + (Number(d.value) || 0), 0);
+    const kind = g.filter((d) => d.giftType === "In-kind").reduce((s, d) => s + (Number(d.value) || 0), 0);
+    $("donTotals").innerHTML = `<span class="chip">Cash logged: ${esc(money(cash))}</span><span class="chip">In-kind value logged: ${esc(money(kind))}</span><span class="chip">${g.length} gifts</span>`;
+  }
+  function eventRow(e) {
+    return `<li class="row" data-id="${esc(e.id)}" data-kind="events"><span class="dot" aria-hidden="true" style="background:var(--yellow)"></span>
+      <div class="row__main" data-open><div class="row__title">${esc(e.title)}</div><div class="row__meta">${esc([e.location, e.owner, e.status].filter(Boolean).join(" · "))}</div></div>
+      <div>${e.date ? `<span class="chip">${esc(fmt(e.date))}</span>` : '<span class="chip">Date TBD</span>'}</div></li>`;
+  }
+  function renderEvents() {
+    const ev = [...state.events].sort((a, b) => (a.date || "9999").localeCompare(b.date || "9999"));
+    fill($("eventList"), ev, eventRow, "No events yet. Add one with “+ New”.");
+  }
+  function renderAll() { renderToday(); renderPartners(); renderTasks(); renderDonations(); renderEvents(); }
+
+  // ---------- views ----------
+  const VIEWS = ["today", "partners", "tasks", "donations", "events"];
+  function showView() {
+    const v = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : "today";
+    VIEWS.forEach((n) => { $("view-" + n).hidden = n !== v; });
+    document.querySelectorAll(".tabs a").forEach((a) => { if (a.dataset.view === v) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
+  }
+  window.addEventListener("hashchange", showView);
+
+  // ---------- filters ----------
+  const opts = (sel, list) => { sel.insertAdjacentHTML("beforeend", list.map((x) => `<option>${esc(x)}</option>`).join("")); };
+  opts($("pType"), TYPES); opts($("pOwner"), TEAM); opts($("tOwner"), TEAM);
+  ["pSearch", "pType", "pOwner"].forEach((id) => $(id).addEventListener("input", renderPartners));
+  ["tSearch", "tOwner", "tShow"].forEach((id) => $(id).addEventListener("input", renderTasks));
+
+  // ---------- dialog ----------
+  const dlg = $("dlg");
+  let editing = null; // { kind, id|null }
+  function buildFields(kind, data) {
+    $("fields").innerHTML = SCHEMA[kind].fields.map((f) => {
+      const id = "f_" + kind + "_" + f.k, v = data?.[f.k] ?? "";
+      let input;
+      if (f.t === "select") input = `<select id="${id}" name="${f.k}">${f.o.map((o) => `<option ${o === v ? "selected" : ""}>${esc(o)}</option>`).join("")}</select>`;
+      else if (f.t === "partner") input = `<select id="${id}" name="${f.k}"><option value="">None</option>${[...state.contacts].sort((a, b) => a.name.localeCompare(b.name)).map((c) => `<option value="${esc(c.id)}" ${c.id === v ? "selected" : ""}>${esc(c.name)}</option>`).join("")}</select>`;
+      else if (f.t === "textarea") input = `<textarea id="${id}" name="${f.k}">${esc(v)}</textarea>`;
+      else input = `<input id="${id}" name="${f.k}" type="${f.t}" ${f.t === "number" ? 'min="0" step="1"' : ""} value="${esc(v)}" ${f.req ? "required" : ""}>`;
+      return `<div class="field ${f.wide ? "field--wide" : ""}"><label for="${id}">${esc(f.l)}${f.req ? " *" : ""}</label>${input}</div>`;
+    }).join("");
+    if (!state.canWrite) $("fields").querySelectorAll("input,select,textarea").forEach((el) => (el.disabled = true));
+  }
+  function openDialog(kind, id) {
+    const data = id ? state[kind].find((x) => x.id === id) : defaults(kind);
+    editing = { kind, id: id || null };
+    $("dlgTitle").textContent = (id ? (state.canWrite ? "Edit " : "") : "New ") + SCHEMA[kind].label.toLowerCase();
+    $("kindField").hidden = !!id;
+    $("kind").value = kind;
+    $("delBtn").hidden = !id || !state.canWrite; $("delBtn").textContent = "Delete"; $("delBtn").dataset.confirm = "";
+    $("saveBtn").hidden = !state.canWrite;
+    $("dlgStatus").textContent = ""; $("dlgStatus").className = "status";
+    buildFields(kind, data);
+    dlg.showModal();
+    dlg.querySelector("#fields input, #fields select")?.focus();
+  }
+  function defaults(kind) {
+    if (kind === "tasks") return { status: "Open", priority: "Medium", due: addDays(7) };
+    if (kind === "contacts") return { stage: "Prospect", lastContact: today() };
+    if (kind === "donations") return { date: today(), giftType: "Cash", receiptSent: "No", thanked: "No" };
+    if (kind === "events") return { status: "Planning" };
+    return {};
+  }
+  $("kind").addEventListener("change", () => { editing = { kind: $("kind").value, id: null }; $("dlgTitle").textContent = "New " + SCHEMA[editing.kind].label.toLowerCase(); buildFields(editing.kind, defaults(editing.kind)); });
+  $("newBtn").addEventListener("click", () => {
+    const v = location.hash.slice(1);
+    openDialog({ partners: "contacts", donations: "donations", events: "events" }[v] || "tasks", null);
+  });
+  $("cancelBtn").addEventListener("click", () => dlg.close());
+
+  $("dlgForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!db || !editing || !state.canWrite) return;
+    const { kind, id } = editing;
+    const body = {};
+    for (const f of SCHEMA[kind].fields) {
+      const el = $("f_" + kind + "_" + f.k);
+      let v = el.value.trim();
+      if (f.req && !v) { $("dlgStatus").textContent = `Please fill in “${f.l}”.`; $("dlgStatus").className = "status err"; el.focus(); return; }
+      if (f.t === "number") v = v === "" ? null : Number(v);
+      body[f.k] = v;
+    }
+    const prev = id ? state[kind].find((x) => x.id === id) : null;
+    if (kind === "tasks") body.doneAt = body.status === "Done" ? (prev?.doneAt || today()) : "";
+    body.updatedAt = new Date().toISOString();
+    body.createdAt = prev?.createdAt || body.updatedAt;
+    $("saveBtn").disabled = true; $("dlgStatus").textContent = "Saving…"; $("dlgStatus").className = "status";
+    try {
+      if (id) await db.collection(kind).doc(id).set(body);
+      else await db.collection(kind).add(body);
+      dlg.close(); toast("Saved");
+    } catch (err) {
+      $("dlgStatus").textContent = writeError(err); $("dlgStatus").className = "status err";
+    } finally { $("saveBtn").disabled = false; }
+  });
+
+  $("delBtn").addEventListener("click", async () => {
+    const b = $("delBtn");
+    if (!b.dataset.confirm) { b.dataset.confirm = "1"; b.textContent = "Tap again to delete"; return; }
+    try { await db.collection(editing.kind).doc(editing.id).delete(); dlg.close(); toast("Deleted"); }
+    catch (err) { $("dlgStatus").textContent = writeError(err); $("dlgStatus").className = "status err"; }
+  });
+
+  // Open a record or toggle a task from any list.
+  document.addEventListener("click", (e) => {
+    const t = e.target.closest("[data-toggle]");
+    if (t) return;
+    const host = e.target.closest("[data-kind][data-id]");
+    if (!host || e.target.closest("dialog")) return;
+    if (host.tagName === "LI" && !e.target.closest("[data-open]")) return;
+    openDialog(host.dataset.kind, host.dataset.id);
+  });
+  document.addEventListener("change", async (e) => {
+    const box = e.target.closest("[data-toggle]");
+    if (!box || !db) return;
+    const task = state.tasks.find((x) => x.id === box.dataset.toggle);
+    if (!task) return;
+    const { id, ...rest } = task;
+    const done = box.checked;
+    box.disabled = true;
+    try {
+      await db.collection("tasks").doc(id).set({ ...rest, status: done ? "Done" : "Open", doneAt: done ? today() : "", updatedAt: new Date().toISOString() });
+      toast(done ? "Marked done" : "Reopened");
+    } catch (err) { box.checked = !done; toast(writeError(err)); }
+    finally { box.disabled = !state.canWrite; }
+  });
+
+  function writeError(err) {
+    if (err?.code === "invalid_argument") { state.canWrite = false; return "You have view-only access, so changes can't be saved."; }
+    if (err?.code === "quota_exceeded") return "The hub is full. Delete some old records, then try again.";
+    return "That didn't save. Check your connection and try again.";
+  }
+  let toastTimer;
+  function toast(msg) { const t = $("toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => (t.hidden = true), 2200); }
+
+  // ---------- data ----------
+  showView();
+  renderAll();
+  (async () => {
+    db = await claude.use("db");
+    if (!db) {
+      const n = $("notice"); n.hidden = false;
+      n.textContent = "Sign in to Claude and open this page from the link Jacob shared to see and edit the hub.";
+      $("newBtn").disabled = true;
+      return;
+    }
+    const user = await claude.use("user");
+    const can = user ? await user.can("data.write") : null;
+    if (can === false) {
+      state.canWrite = false; $("newBtn").hidden = true;
+      const n = $("notice"); n.hidden = false; n.textContent = "You have view-only access. Ask Jacob for Contributor access to make changes.";
+    }
+    for (const kind of ["tasks", "contacts", "donations", "events"]) {
+      db.collection(kind).onSnapshot((snap) => {
+        state[kind] = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        renderAll();
+      }, () => { const n = $("notice"); n.hidden = false; n.textContent = "Live updates paused. Reload the page to reconnect."; });
+    }
+    db.doc("digest/latest").onSnapshot((snap) => { state.brief = snap.exists ? snap.data() : null; renderToday(); }, () => {});
+  })();
+})();
+</script>
